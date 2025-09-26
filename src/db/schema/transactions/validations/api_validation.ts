@@ -1,7 +1,16 @@
-import { insertTransactionSchema } from "./data_validation";
+import { z } from "zod";
+import {
+  insertTransactionSchema,
+  updateTransactionSchema,
+} from "./data_validation";
 
-export const postTransactionSchema = insertTransactionSchema.pick({
-  userProductId: true,
-  amount: true,
-  paymentMethod: true,
+export const getTransactionByIdSchema = z.object({
+  id: z.string(),
 });
+
+export const deleteTransactionByIdSchema = z.object({
+  id: z.string(),
+});
+
+export const transactionSchema = insertTransactionSchema;
+export const transactionUpdateSchema = updateTransactionSchema;
