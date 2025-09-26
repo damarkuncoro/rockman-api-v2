@@ -1,10 +1,6 @@
-import { userPhonesService } from '@/services/database/user_phones/user_phones.service';
-import { userAddressesService } from '@/services/database/user_addresses/user_addresses.service';
 import { PgTable } from 'drizzle-orm/pg-core';
 
 export interface IServiceRegistry {
-  userPhones: typeof userPhonesService;
-  userAddresses: typeof userAddressesService;
   [key: string]: unknown;
 }
 
