@@ -9,5 +9,6 @@ export const userAddressesRelations = relations(userAddresses, ({ one }) => ({
 	user: one(users, {
 		fields: [userAddresses.userId],
 		references: [users.id],
+		relationName: "user_addresses",
 	}),
 }));

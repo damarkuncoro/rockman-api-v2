@@ -25,6 +25,9 @@ async function main() {
   await db.delete(schema.roles);
   await db.delete(schema.features);
   await db.delete(schema.featureCategories);
+  await db.delete(schema.customerEquipment);
+  await db.delete(schema.networkEquipment);
+  await db.delete(schema.outages);
   console.log('Cleared existing data');
 
   // Departments
@@ -42,6 +45,11 @@ async function main() {
     { name: 'Billing Specialist', email: 'billing@isp.com', passwordHash: 'hashed_password', departmentId: departments[1].id },
     { name: 'Sales Rep', email: 'sales@isp.com', passwordHash: 'hashed_password', departmentId: departments[2].id },
     { name: 'Network Engineer', email: 'netops@isp.com', passwordHash: 'hashed_password', departmentId: departments[3].id },
+    { name: 'Customer A', email: 'customer.a@example.com', passwordHash: 'hashed_password', departmentId: departments[0].id },
+    { name: 'Customer B', email: 'customer.b@example.com', passwordHash: 'hashed_password', departmentId: departments[1].id },
+    { name: 'Customer C', email: 'customer.c@example.com', passwordHash: 'hashed_password', departmentId: departments[2].id },
+    { name: 'Customer D', email: 'customer.d@example.com', passwordHash: 'hashed_password', departmentId: departments[3].id },
+    { name: 'Customer E', email: 'customer.e@example.com', passwordHash: 'hashed_password', departmentId: departments[0].id },
   ]).returning();
   console.log('Seeded users');
 
@@ -60,6 +68,11 @@ async function main() {
     { userId: users[1].id, roleId: roles[1].id },
     { userId: users[2].id, roleId: roles[2].id },
     { userId: users[3].id, roleId: roles[3].id },
+    { userId: users[4].id, roleId: roles[0].id },
+    { userId: users[5].id, roleId: roles[1].id },
+    { userId: users[6].id, roleId: roles[2].id },
+    { userId: users[7].id, roleId: roles[3].id },
+    { userId: users[8].id, roleId: roles[0].id },
   ]);
   console.log('Seeded user roles');
 
@@ -108,6 +121,11 @@ async function main() {
     { userId: users[0].id, productId: products[0].id },
     { userId: users[1].id, productId: products[1].id },
     { userId: users[2].id, productId: products[2].id },
+    { userId: users[4].id, productId: products[0].id },
+    { userId: users[5].id, productId: products[1].id },
+    { userId: users[6].id, productId: products[2].id },
+    { userId: users[7].id, productId: products[0].id },
+    { userId: users[8].id, productId: products[1].id },
   ]).returning();
   console.log('Seeded user products');
 
@@ -116,13 +134,20 @@ async function main() {
     { userId: users[0].id, userProductId: userProducts[0].id, amount: '25.00', status: 'completed', paymentMethod: 'credit_card' },
     { userId: users[1].id, userProductId: userProducts[1].id, amount: '50.00', status: 'completed', paymentMethod: 'bank_transfer' },
     { userId: users[2].id, userProductId: userProducts[2].id, amount: '100.00', status: 'pending', paymentMethod: 'credit_card' },
+    { userId: users[4].id, userProductId: userProducts[3].id, amount: '25.00', status: 'completed', paymentMethod: 'credit_card' },
+    { userId: users[5].id, userProductId: userProducts[4].id, amount: '50.00', status: 'completed', paymentMethod: 'bank_transfer' },
+    { userId: users[6].id, userProductId: userProducts[5].id, amount: '100.00', status: 'pending', paymentMethod: 'credit_card' },
+    { userId: users[7].id, userProductId: userProducts[6].id, amount: '25.00', status: 'completed', paymentMethod: 'credit_card' },
+    { userId: users[8].id, userProductId: userProducts[7].id, amount: '50.00', status: 'completed', paymentMethod: 'bank_transfer' },
   ]);
   console.log('Seeded transactions');
 
   // Tickets
   const tickets = await db.insert(schema.tickets).values([
-    { userId: users[0].id, title: 'Internet connection is slow', description: 'My internet connection has been very slow for the past few days.', status: 'open', priority: 'high' },
-    { userId: users[1].id, title: 'Billing inquiry', description: 'I have a question about my latest bill.', status: 'in_progress', priority: 'medium' },
+    { userId: users[0].id, title: 'Internet connection is slow', description: 'My internet connection has been very slow for the past few days.', status: 'open', priority: 'high', category: 'network' },
+    { userId: users[1].id, title: 'Billing inquiry', description: 'I have a question about my latest bill.', status: 'in_progress', priority: 'medium', category: 'billing' },
+    { userId: users[4].id, title: 'Internet connection is slow', description: 'My internet connection has been very slow for the past few days.', status: 'open', priority: 'high', category: 'network' },
+    { userId: users[5].id, title: 'Billing inquiry', description: 'I have a question about my latest bill.', status: 'in_progress', priority: 'medium', category: 'billing' },
   ]).returning();
   console.log('Seeded tickets');
 
@@ -130,6 +155,8 @@ async function main() {
   await db.insert(schema.ticketReplies).values([
     { ticketId: tickets[0].id, userId: users[0].id, message: 'I have already tried restarting my router, but it did not help.' },
     { ticketId: tickets[1].id, userId: users[1].id, message: 'I would like to know why my bill is higher this month.' },
+    { ticketId: tickets[2].id, userId: users[4].id, message: 'I have already tried restarting my router, but it did not help.' },
+    { ticketId: tickets[3].id, userId: users[5].id, message: 'I would like to know why my bill is higher this month.' },
   ]);
   console.log('Seeded ticket replies');
 
@@ -146,6 +173,11 @@ async function main() {
     { userId: users[0].id, membershipId: memberships[0].id },
     { userId: users[1].id, membershipId: memberships[1].id },
     { userId: users[2].id, membershipId: memberships[2].id },
+    { userId: users[4].id, membershipId: memberships[0].id },
+    { userId: users[5].id, membershipId: memberships[1].id },
+    { userId: users[6].id, membershipId: memberships[2].id },
+    { userId: users[7].id, membershipId: memberships[0].id },
+    { userId: users[8].id, membershipId: memberships[1].id },
   ]);
   console.log('Seeded user memberships');
 
@@ -154,6 +186,11 @@ async function main() {
     { userId: users[0].id, points: 500 },
     { userId: users[1].id, points: 1500 },
     { userId: users[2].id, points: 6000 },
+    { userId: users[4].id, points: 500 },
+    { userId: users[5].id, points: 1500 },
+    { userId: users[6].id, points: 6000 },
+    { userId: users[7].id, points: 500 },
+    { userId: users[8].id, points: 1500 },
   ]);
   console.log('Seeded loyalty points');
 
@@ -162,17 +199,66 @@ async function main() {
     { userId: users[0].id, type: 'KTP', number: '1234567890123456' },
     { userId: users[1].id, type: 'SIM', number: '0987654321' },
     { userId: users[2].id, type: 'Passport', number: 'A1234567' },
+    { userId: users[4].id, type: 'KTP', number: '1234567890123456' },
+    { userId: users[5].id, type: 'SIM', number: '0987654321' },
+    { userId: users[6].id, type: 'Passport', number: 'A1234567' },
+    { userId: users[7].id, type: 'KTP', number: '1234567890123456' },
+    { userId: users[8].id, type: 'SIM', number: '0987654321' },
   ]);
   console.log('Seeded user identities');
 
   // User Addresses and Phones
   await db.insert(schema.userAddresses).values([
     { userId: users[0].id, label: 'Home', recipientName: 'Support Agent', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
+    { userId: users[4].id, label: 'Home', recipientName: 'Customer A', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
+    { userId: users[5].id, label: 'Home', recipientName: 'Customer B', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
+    { userId: users[6].id, label: 'Home', recipientName: 'Customer C', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
+    { userId: users[7].id, label: 'Home', recipientName: 'Customer D', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
+    { userId: users[8].id, label: 'Home', recipientName: 'Customer E', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
   ]);
   await db.insert(schema.userPhones).values([
     { userId: users[0].id, label: 'Work', phoneNumber: '111-222-3333' },
+    { userId: users[4].id, label: 'Work', phoneNumber: '111-222-3333' },
+    { userId: users[5].id, label: 'Work', phoneNumber: '111-222-3333' },
+    { userId: users[6].id, label: 'Work', phoneNumber: '111-222-3333' },
+    { userId: users[7].id, label: 'Work', phoneNumber: '111-222-3333' },
+    { userId: users[8].id, label: 'Work', phoneNumber: '111-222-3333' },
   ]);
   console.log('Seeded user addresses and phones');
+
+  // Network Equipment
+  const networkEquipment = await db.insert(schema.networkEquipment).values([
+    { serialNumber: 'SN12345', macAddress: '00:1B:44:11:3A:B7', model: 'Modem-X1', equipmentType: 'modem', status: 'in_stock' },
+    { serialNumber: 'SN67890', macAddress: '00:1B:44:11:3A:B8', model: 'Router-Y2', equipmentType: 'router', status: 'in_stock' },
+  ]).returning();
+  console.log('Seeded network equipment');
+
+  // Customer Equipment
+  await db.insert(schema.customerEquipment).values([
+    { userId: users[4].id, equipmentId: networkEquipment[0].id },
+    { userId: users[5].id, equipmentId: networkEquipment[1].id },
+  ]);
+  console.log('Seeded customer equipment');
+
+  // Outages
+  await db.insert(schema.outages).values([
+    { startTime: new Date(), description: 'Planned maintenance in Bandung area.', affectedArea: 'Bandung' },
+  ]);
+  console.log('Seeded outages');
+
+  // Knowledge Base Articles
+  const articles = await db.insert(schema.knowledgeBaseArticles).values([
+    { title: 'How to restart your modem', content: 'Step 1: Unplug the power cord...', category: 'troubleshooting' },
+    { title: 'Understanding your bill', content: 'Your bill includes the following sections...', category: 'billing_faq' },
+  ]).returning();
+  console.log('Seeded knowledge base articles');
+
+  // Ticket to Knowledge Base
+  await db.insert(schema.ticketToKnowledgeBase).values([
+    { ticketId: tickets[0].id, articleId: articles[0].id },
+    { ticketId: tickets[1].id, articleId: articles[1].id },
+  ]);
+  console.log('Seeded ticket to knowledge base links');
 
   console.log('Database seeding complete.');
 }

@@ -20,6 +20,9 @@ async function main() {
     await db.execute(`DROP TABLE IF EXISTS "${table.tablename}" CASCADE`);
   }
 
+  await db.execute(`DROP TYPE IF EXISTS "equipment_status"`);
+  await db.execute(`DROP TYPE IF EXISTS "equipment_type"`);
+
   process.exit(0);
 }
 

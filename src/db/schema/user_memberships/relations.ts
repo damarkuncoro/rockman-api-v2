@@ -7,6 +7,7 @@ export const userMembershipsRelations = relations(userMemberships, ({ one }) => 
   user: one(users, {
     fields: [userMemberships.userId],
     references: [users.id],
+    relationName: "user_memberships",
   }),
   membership: one(memberships, {
     fields: [userMemberships.membershipId],

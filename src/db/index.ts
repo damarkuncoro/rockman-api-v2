@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
+import * as schema from './schema';
 
 // Membuat connection pool untuk performa yang lebih baik
 const pool = new Pool({
@@ -8,6 +9,6 @@ const pool = new Pool({
 });
 
 // Inisialisasi Drizzle dengan pool connection
-const db = drizzle(pool);
+const db = drizzle(pool, { schema });
 
 export default db;

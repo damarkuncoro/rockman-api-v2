@@ -18,5 +18,6 @@ export const userPhonesRelations = relations(userPhones, ({ one }) => ({
 	user: one(users, {
 		fields: [userPhones.userId],
 		references: [users.id],
+		relationName: "user_phones",
 	}),
 }));
