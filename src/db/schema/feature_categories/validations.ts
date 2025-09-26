@@ -1,0 +1,1 @@
+// No validations for feature categories yet.
