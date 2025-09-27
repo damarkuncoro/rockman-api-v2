@@ -49,3 +49,12 @@ export * from "./billing/one_time_charges";
 export * from "./billing/payment_methods";
 export * from "./billing/credit_notes";
 export * from "./billing/credit_note_applications";
+
+// Employee and Customer Management
+export * from "./user_employees";
+export * from "./user_customers";
+export * from "./positions";
+export * from "./employment_history";
+export * from "./leave_requests";
+export * from "./performance_reviews";
+export * from "./payrolls";

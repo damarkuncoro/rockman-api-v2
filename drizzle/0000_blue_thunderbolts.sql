@@ -391,8 +391,8 @@ CREATE TABLE "discounts" (
 );
 --> statement-breakpoint
 CREATE TABLE "subscription_discounts" (
-	"subscription_id" uuid,
-	"discount_id" uuid,
+	"subscription_id" uuid NOT NULL,
+	"discount_id" uuid NOT NULL,
 	"applied_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "subscription_discounts_subscription_id_discount_id_pk" PRIMARY KEY("subscription_id","discount_id")
 );
@@ -453,6 +453,75 @@ CREATE TABLE "credit_note_applications" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "user_employees" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid,
+	"first_name" varchar(100) NOT NULL,
+	"last_name" varchar(100) NOT NULL,
+	"date_of_birth" date,
+	"gender" varchar(50),
+	"marital_status" varchar(50),
+	"nationality" varchar(100),
+	"personal_email" varchar(255),
+	"phone_number" varchar(20),
+	"address" text
+);
+--> statement-breakpoint
+CREATE TABLE "user_customers" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid,
+	"customer_type" varchar(50),
+	"customer_tier" varchar(50),
+	"customer_since" date,
+	"customer_status" varchar(50),
+	"customer_segment" varchar(100)
+);
+--> statement-breakpoint
+CREATE TABLE "positions" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"title" varchar(100) NOT NULL,
+	"description" text,
+	"department_id" uuid
+);
+--> statement-breakpoint
+CREATE TABLE "employment_history" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"employee_id" uuid,
+	"position_id" uuid,
+	"start_date" date NOT NULL,
+	"end_date" date
+);
+--> statement-breakpoint
+CREATE TABLE "leave_requests" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"employee_id" uuid,
+	"leave_type" varchar(100) NOT NULL,
+	"start_date" date NOT NULL,
+	"end_date" date NOT NULL,
+	"status" varchar(50) NOT NULL,
+	"reason" text
+);
+--> statement-breakpoint
+CREATE TABLE "performance_reviews" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"employee_id" uuid,
+	"reviewer_id" uuid,
+	"review_date" date NOT NULL,
+	"rating" integer NOT NULL,
+	"comments" text
+);
+--> statement-breakpoint
+CREATE TABLE "payrolls" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"employee_id" uuid,
+	"pay_period_start" date NOT NULL,
+	"pay_period_end" date NOT NULL,
+	"gross_salary" numeric(10, 2) NOT NULL,
+	"net_salary" numeric(10, 2) NOT NULL,
+	"deductions" numeric(10, 2),
+	"payment_date" date NOT NULL
+);
+--> statement-breakpoint
 ALTER TABLE "notifications" ADD CONSTRAINT "notifications_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "users" ADD CONSTRAINT "users_department_id_departments_id_fk" FOREIGN KEY ("department_id") REFERENCES "public"."departments"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "features" ADD CONSTRAINT "features_category_id_feature_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."feature_categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -504,6 +573,15 @@ ALTER TABLE "credit_notes" ADD CONSTRAINT "credit_notes_user_id_users_id_fk" FOR
 ALTER TABLE "credit_notes" ADD CONSTRAINT "credit_notes_original_invoice_id_invoices_id_fk" FOREIGN KEY ("original_invoice_id") REFERENCES "public"."invoices"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "credit_note_applications" ADD CONSTRAINT "credit_note_applications_credit_note_id_credit_notes_id_fk" FOREIGN KEY ("credit_note_id") REFERENCES "public"."credit_notes"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "credit_note_applications" ADD CONSTRAINT "credit_note_applications_invoice_id_invoices_id_fk" FOREIGN KEY ("invoice_id") REFERENCES "public"."invoices"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "user_employees" ADD CONSTRAINT "user_employees_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "user_customers" ADD CONSTRAINT "user_customers_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "positions" ADD CONSTRAINT "positions_department_id_departments_id_fk" FOREIGN KEY ("department_id") REFERENCES "public"."departments"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "employment_history" ADD CONSTRAINT "employment_history_employee_id_user_employees_id_fk" FOREIGN KEY ("employee_id") REFERENCES "public"."user_employees"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "employment_history" ADD CONSTRAINT "employment_history_position_id_positions_id_fk" FOREIGN KEY ("position_id") REFERENCES "public"."positions"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "leave_requests" ADD CONSTRAINT "leave_requests_employee_id_user_employees_id_fk" FOREIGN KEY ("employee_id") REFERENCES "public"."user_employees"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "performance_reviews" ADD CONSTRAINT "performance_reviews_employee_id_user_employees_id_fk" FOREIGN KEY ("employee_id") REFERENCES "public"."user_employees"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "performance_reviews" ADD CONSTRAINT "performance_reviews_reviewer_id_users_id_fk" FOREIGN KEY ("reviewer_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "payrolls" ADD CONSTRAINT "payrolls_employee_id_user_employees_id_fk" FOREIGN KEY ("employee_id") REFERENCES "public"."user_employees"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "tickets_status_idx" ON "tickets" USING btree ("status");--> statement-breakpoint
 CREATE INDEX "tickets_priority_idx" ON "tickets" USING btree ("priority");--> statement-breakpoint
 CREATE INDEX "tickets_category_idx" ON "tickets" USING btree ("category");--> statement-breakpoint

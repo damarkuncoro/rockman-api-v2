@@ -1,4 +1,4 @@
 import { SERVICE } from "@/core/core.service.registry";
-import { PaymentService } from "@/v2/services/database/payments";
+import { paymentService } from "@/v2/services/database/payments";
 
-SERVICE.register("payments", new PaymentService());
+SERVICE.register("payments", paymentService);

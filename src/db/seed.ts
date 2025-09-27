@@ -1,269 +1,108 @@
-import db from './';
+import db from '.';
 import * as schema from './schema';
+import { hash } from 'bcryptjs';
+import { randomUUID } from 'crypto';
+
+type User = typeof schema.users.$inferInsert;
 
 async function main() {
-  console.log('Seeding database for ISP company...');
+  console.log('Seeding started...');
 
-  // Clear existing data
-  await db.delete(schema.userIdentities);
-  await db.delete(schema.loyaltyPoints);
-  await db.delete(schema.userMemberships);
-  await db.delete(schema.memberships);
-  await db.delete(schema.ticketReplies);
-  await db.delete(schema.tickets);
-  await db.delete(schema.transactions);
-  await db.delete(schema.userProducts);
-  await db.delete(schema.products);
-  await db.delete(schema.userRoles);
-  await db.delete(schema.roleFeatures);
-  await db.delete(schema.policies);
-  await db.delete(schema.userDevices);
-  await db.delete(schema.userAddresses);
-  await db.delete(schema.userPhones);
+  // Delete all existing data
+  await db.delete(schema.employmentHistory);
+  await db.delete(schema.userEmployees);
+  await db.delete(schema.positions);
   await db.delete(schema.users);
-  await db.delete(schema.departments);
-  await db.delete(schema.roles);
-  await db.delete(schema.features);
-  await db.delete(schema.featureCategories);
-  await db.delete(schema.customerEquipment);
-  await db.delete(schema.networkEquipment);
-  await db.delete(schema.outages);
-  console.log('Cleared existing data');
 
-  // Departments
-  const departments = await db.insert(schema.departments).values([
-    { name: 'Technical Support', slug: 'tech-support', code: 'TS' },
-    { name: 'Billing', slug: 'billing', code: 'BL' },
-    { name: 'Sales', slug: 'sales', code: 'SL' },
-    { name: 'Network Operations', slug: 'net-ops', code: 'NO' },
-  ]).returning();
-  console.log('Seeded departments');
+  const hashedPassword = await hash('password123', 12);
 
-  // Users
-  const users = await db.insert(schema.users).values([
-    { name: 'Support Agent', email: 'support@isp.com', passwordHash: 'hashed_password', departmentId: departments[0].id },
-    { name: 'Billing Specialist', email: 'billing@isp.com', passwordHash: 'hashed_password', departmentId: departments[1].id },
-    { name: 'Sales Rep', email: 'sales@isp.com', passwordHash: 'hashed_password', departmentId: departments[2].id },
-    { name: 'Network Engineer', email: 'netops@isp.com', passwordHash: 'hashed_password', departmentId: departments[3].id },
-    { name: 'Customer A', email: 'customer.a@example.com', passwordHash: 'hashed_password', departmentId: departments[0].id },
-    { name: 'Customer B', email: 'customer.b@example.com', passwordHash: 'hashed_password', departmentId: departments[1].id },
-    { name: 'Customer C', email: 'customer.c@example.com', passwordHash: 'hashed_password', departmentId: departments[2].id },
-    { name: 'Customer D', email: 'customer.d@example.com', passwordHash: 'hashed_password', departmentId: departments[3].id },
-    { name: 'Customer E', email: 'customer.e@example.com', passwordHash: 'hashed_password', departmentId: departments[0].id },
-  ]).returning();
-  console.log('Seeded users');
+  // Seed Users
+  const users = await db
+    .insert(schema.users)
+    .values([
+      {
+        id: randomUUID(),
+        email: 'admin@rockman.com',
+        passwordHash: hashedPassword,
+        name: 'Admin User',
+      },
+      {
+        id: randomUUID(),
+        email: 'employee1@rockman.com',
+        passwordHash: hashedPassword,
+        name: 'John Doe',
+      },
+      {
+        id: randomUUID(),
+        email: 'employee2@rockman.com',
+        passwordHash: hashedPassword,
+        name: 'Jane Smith',
+      },
+    ])
+    .returning();
 
-  // Roles
-  const roles = await db.insert(schema.roles).values([
-    { name: 'Support Agent', grantsAll: false },
-    { name: 'Billing Specialist', grantsAll: false },
-    { name: 'Sales Representative', grantsAll: false },
-    { name: 'Network Engineer', grantsAll: true },
-  ]).returning();
-  console.log('Seeded roles');
+  // Seed User Employees
+  const userEmployees = await db
+    .insert(schema.userEmployees)
+    .values(
+      users.map((user: User) => ({
+        id: user.id,
+        userId: user.id,
+        firstName: user.name.split(' ')[0],
+        lastName: user.name.split(' ')[1] || '',
+      })),
+    )
+    .returning();
 
-  // User Roles
-  await db.insert(schema.userRoles).values([
-    { userId: users[0].id, roleId: roles[0].id },
-    { userId: users[1].id, roleId: roles[1].id },
-    { userId: users[2].id, roleId: roles[2].id },
-    { userId: users[3].id, roleId: roles[3].id },
-    { userId: users[4].id, roleId: roles[0].id },
-    { userId: users[5].id, roleId: roles[1].id },
-    { userId: users[6].id, roleId: roles[2].id },
-    { userId: users[7].id, roleId: roles[3].id },
-    { userId: users[8].id, roleId: roles[0].id },
+  // Seed Positions
+  const positions = await db
+    .insert(schema.positions)
+    .values([
+      {
+        id: randomUUID(),
+        title: 'Software Engineer',
+        description: 'Develops and maintains software applications.',
+      },
+      {
+        id: randomUUID(),
+        title: 'Project Manager',
+        description: 'Manages software development projects.',
+      },
+      {
+        id: randomUUID(),
+        title: 'UI/UX Designer',
+        description: 'Designs user interfaces and experiences.',
+      },
+    ])
+    .returning();
+
+  // Seed Employment History
+  await db.insert(schema.employmentHistory).values([
+    {
+      id: randomUUID(),
+      employeeId: userEmployees[1].id,
+      positionId: positions[0].id,
+      startDate: new Date('2023-01-15').toISOString().split('T')[0],
+      endDate: new Date('2024-01-15').toISOString().split('T')[0],
+    },
+    {
+      id: randomUUID(),
+      employeeId: userEmployees[1].id,
+      positionId: positions[1].id,
+      startDate: new Date('2024-01-16').toISOString().split('T')[0],
+    },
+    {
+      id: randomUUID(),
+      employeeId: userEmployees[2].id,
+      positionId: positions[2].id,
+      startDate: new Date('2023-05-20').toISOString().split('T')[0],
+    },
   ]);
-  console.log('Seeded user roles');
 
-  // Feature Categories
-  const featureCategories = await db.insert(schema.featureCategories).values([
-    { name: 'Customer Management', slug: 'customer-management', description: 'Features for managing customer accounts.' },
-    { name: 'Billing & Invoicing', slug: 'billing-invoicing', description: 'Features for managing billing and invoices.' },
-    { name: 'Network Tools', slug: 'network-tools', description: 'Tools for monitoring and managing the network.' },
-  ]).returning();
-  console.log('Seeded feature categories');
-
-  // Features
-  const features = await db.insert(schema.features).values([
-    { name: 'Manage Tickets', description: 'Create, update, and close support tickets.', categoryId: featureCategories[0].id },
-    { name: 'Create Invoices', description: 'Generate new invoices for customers.', categoryId: featureCategories[1].id },
-    { name: 'Monitor Network', description: 'Monitor network status and performance.', categoryId: featureCategories[2].id },
-  ]).returning();
-  console.log('Seeded features');
-
-  // Role Features
-  await db.insert(schema.roleFeatures).values([
-    { roleId: roles[0].id, featureId: features[0].id },
-    { roleId: roles[1].id, featureId: features[1].id },
-    { roleId: roles[3].id, featureId: features[2].id },
-  ]);
-  console.log('Seeded role features');
-
-  // Policies
-  await db.insert(schema.policies).values([
-    { featureId: features[0].id, attribute: 'ticket.status', operator: '!=', value: 'closed' },
-    { featureId: features[1].id, attribute: 'invoice.amount', operator: '<=', value: '1000' },
-    { featureId: features[2].id, attribute: 'device.type', operator: '==', value: 'router' },
-  ]);
-  console.log('Seeded policies');
-
-  // Products
-  const products = await db.insert(schema.products).values([
-    { name: 'Basic Internet', description: 'Up to 10 Mbps', price: '25.00' },
-    { name: 'Premium Internet', description: 'Up to 100 Mbps', price: '50.00' },
-    { name: 'Business Internet', description: 'Up to 1 Gbps', price: '100.00' },
-  ]).returning();
-  console.log('Seeded products');
-
-  // User Products
-  const userProducts = await db.insert(schema.userProducts).values([
-    { userId: users[0].id, productId: products[0].id },
-    { userId: users[1].id, productId: products[1].id },
-    { userId: users[2].id, productId: products[2].id },
-    { userId: users[4].id, productId: products[0].id },
-    { userId: users[5].id, productId: products[1].id },
-    { userId: users[6].id, productId: products[2].id },
-    { userId: users[7].id, productId: products[0].id },
-    { userId: users[8].id, productId: products[1].id },
-  ]).returning();
-  console.log('Seeded user products');
-
-  // Transactions
-  await db.insert(schema.transactions).values([
-    { userId: users[0].id, userProductId: userProducts[0].id, amount: '25.00', status: 'completed', paymentMethod: 'credit_card' },
-    { userId: users[1].id, userProductId: userProducts[1].id, amount: '50.00', status: 'completed', paymentMethod: 'bank_transfer' },
-    { userId: users[2].id, userProductId: userProducts[2].id, amount: '100.00', status: 'pending', paymentMethod: 'credit_card' },
-    { userId: users[4].id, userProductId: userProducts[3].id, amount: '25.00', status: 'completed', paymentMethod: 'credit_card' },
-    { userId: users[5].id, userProductId: userProducts[4].id, amount: '50.00', status: 'completed', paymentMethod: 'bank_transfer' },
-    { userId: users[6].id, userProductId: userProducts[5].id, amount: '100.00', status: 'pending', paymentMethod: 'credit_card' },
-    { userId: users[7].id, userProductId: userProducts[6].id, amount: '25.00', status: 'completed', paymentMethod: 'credit_card' },
-    { userId: users[8].id, userProductId: userProducts[7].id, amount: '50.00', status: 'completed', paymentMethod: 'bank_transfer' },
-  ]);
-  console.log('Seeded transactions');
-
-  // Tickets
-  const tickets = await db.insert(schema.tickets).values([
-    { userId: users[0].id, title: 'Internet connection is slow', description: 'My internet connection has been very slow for the past few days.', status: 'open', priority: 'high', category: 'network' },
-    { userId: users[1].id, title: 'Billing inquiry', description: 'I have a question about my latest bill.', status: 'in_progress', priority: 'medium', category: 'billing' },
-    { userId: users[4].id, title: 'Internet connection is slow', description: 'My internet connection has been very slow for the past few days.', status: 'open', priority: 'high', category: 'network' },
-    { userId: users[5].id, title: 'Billing inquiry', description: 'I have a question about my latest bill.', status: 'in_progress', priority: 'medium', category: 'billing' },
-  ]).returning();
-  console.log('Seeded tickets');
-
-  // Ticket Replies
-  await db.insert(schema.ticketReplies).values([
-    { ticketId: tickets[0].id, userId: users[0].id, message: 'I have already tried restarting my router, but it did not help.' },
-    { ticketId: tickets[1].id, userId: users[1].id, message: 'I would like to know why my bill is higher this month.' },
-    { ticketId: tickets[2].id, userId: users[4].id, message: 'I have already tried restarting my router, but it did not help.' },
-    { ticketId: tickets[3].id, userId: users[5].id, message: 'I would like to know why my bill is higher this month.' },
-  ]);
-  console.log('Seeded ticket replies');
-
-  // Memberships
-  const memberships = await db.insert(schema.memberships).values([
-    { name: 'Bronze', description: 'Basic membership tier', minPoints: 0, discountPercentage: '0' },
-    { name: 'Silver', description: 'Intermediate membership tier', minPoints: 1000, discountPercentage: '5' },
-    { name: 'Gold', description: 'Premium membership tier', minPoints: 5000, discountPercentage: '10' },
-  ]).returning();
-  console.log('Seeded memberships');
-
-  // User Memberships
-  await db.insert(schema.userMemberships).values([
-    { userId: users[0].id, membershipId: memberships[0].id },
-    { userId: users[1].id, membershipId: memberships[1].id },
-    { userId: users[2].id, membershipId: memberships[2].id },
-    { userId: users[4].id, membershipId: memberships[0].id },
-    { userId: users[5].id, membershipId: memberships[1].id },
-    { userId: users[6].id, membershipId: memberships[2].id },
-    { userId: users[7].id, membershipId: memberships[0].id },
-    { userId: users[8].id, membershipId: memberships[1].id },
-  ]);
-  console.log('Seeded user memberships');
-
-  // Loyalty Points
-  await db.insert(schema.loyaltyPoints).values([
-    { userId: users[0].id, points: 500 },
-    { userId: users[1].id, points: 1500 },
-    { userId: users[2].id, points: 6000 },
-    { userId: users[4].id, points: 500 },
-    { userId: users[5].id, points: 1500 },
-    { userId: users[6].id, points: 6000 },
-    { userId: users[7].id, points: 500 },
-    { userId: users[8].id, points: 1500 },
-  ]);
-  console.log('Seeded loyalty points');
-
-  // User Identities
-  await db.insert(schema.userIdentities).values([
-    { userId: users[0].id, type: 'KTP', number: '1234567890123456' },
-    { userId: users[1].id, type: 'SIM', number: '0987654321' },
-    { userId: users[2].id, type: 'Passport', number: 'A1234567' },
-    { userId: users[4].id, type: 'KTP', number: '1234567890123456' },
-    { userId: users[5].id, type: 'SIM', number: '0987654321' },
-    { userId: users[6].id, type: 'Passport', number: 'A1234567' },
-    { userId: users[7].id, type: 'KTP', number: '1234567890123456' },
-    { userId: users[8].id, type: 'SIM', number: '0987654321' },
-  ]);
-  console.log('Seeded user identities');
-
-  // User Addresses and Phones
-  await db.insert(schema.userAddresses).values([
-    { userId: users[0].id, label: 'Home', recipientName: 'Support Agent', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
-    { userId: users[4].id, label: 'Home', recipientName: 'Customer A', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
-    { userId: users[5].id, label: 'Home', recipientName: 'Customer B', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
-    { userId: users[6].id, label: 'Home', recipientName: 'Customer C', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
-    { userId: users[7].id, label: 'Home', recipientName: 'Customer D', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
-    { userId: users[8].id, label: 'Home', recipientName: 'Customer E', phoneNumber: '111-222-3333', addressLine1: '123 Support St', city: 'Bandung', province: 'West Java', postalCode: '40111' },
-  ]);
-  await db.insert(schema.userPhones).values([
-    { userId: users[0].id, label: 'Work', phoneNumber: '111-222-3333' },
-    { userId: users[4].id, label: 'Work', phoneNumber: '111-222-3333' },
-    { userId: users[5].id, label: 'Work', phoneNumber: '111-222-3333' },
-    { userId: users[6].id, label: 'Work', phoneNumber: '111-222-3333' },
-    { userId: users[7].id, label: 'Work', phoneNumber: '111-222-3333' },
-    { userId: users[8].id, label: 'Work', phoneNumber: '111-222-3333' },
-  ]);
-  console.log('Seeded user addresses and phones');
-
-  // Network Equipment
-  const networkEquipment = await db.insert(schema.networkEquipment).values([
-    { serialNumber: 'SN12345', macAddress: '00:1B:44:11:3A:B7', model: 'Modem-X1', equipmentType: 'modem', status: 'in_stock' },
-    { serialNumber: 'SN67890', macAddress: '00:1B:44:11:3A:B8', model: 'Router-Y2', equipmentType: 'router', status: 'in_stock' },
-  ]).returning();
-  console.log('Seeded network equipment');
-
-  // Customer Equipment
-  await db.insert(schema.customerEquipment).values([
-    { userId: users[4].id, equipmentId: networkEquipment[0].id },
-    { userId: users[5].id, equipmentId: networkEquipment[1].id },
-  ]);
-  console.log('Seeded customer equipment');
-
-  // Outages
-  await db.insert(schema.outages).values([
-    { startTime: new Date(), description: 'Planned maintenance in Bandung area.', affectedArea: 'Bandung' },
-  ]);
-  console.log('Seeded outages');
-
-  // Knowledge Base Articles
-  const articles = await db.insert(schema.knowledgeBaseArticles).values([
-    { title: 'How to restart your modem', content: 'Step 1: Unplug the power cord...', category: 'troubleshooting' },
-    { title: 'Understanding your bill', content: 'Your bill includes the following sections...', category: 'billing_faq' },
-  ]).returning();
-  console.log('Seeded knowledge base articles');
-
-  // Ticket to Knowledge Base
-  await db.insert(schema.ticketToKnowledgeBase).values([
-    { ticketId: tickets[0].id, articleId: articles[0].id },
-    { ticketId: tickets[1].id, articleId: articles[1].id },
-  ]);
-  console.log('Seeded ticket to knowledge base links');
-
-  console.log('Database seeding complete.');
+  console.log('Seeding completed successfully!');
 }
 
-main().catch((err) => {
-  console.error('Error seeding database:', err);
+main().catch((error) => {
+  console.error('Error during seeding:', error);
   process.exit(1);
 });
