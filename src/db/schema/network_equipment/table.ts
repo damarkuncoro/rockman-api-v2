@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, timestamp, pgEnum } from "drizzle-orm/pg-core";
 
 export const equipmentTypeEnum = pgEnum("equipment_type", ["modem", "router", "switch"]);
 export const equipmentStatusEnum = pgEnum("equipment_status", ["in_stock", "assigned", "faulty"]);

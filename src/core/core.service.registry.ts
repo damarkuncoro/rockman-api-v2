@@ -18,8 +18,8 @@ class ServiceRegistry {
         `[SERVICE Registry] Service '${name}' sudah terdaftar. Mengganti dengan instance baru.`
       );
     }
-    this.services.set(name, service);
-    (this as any)[name] = service;
+    this.services.set(name, service as unknown as IService<PgTable>);
+    (this as Record<string, unknown>)[name] = service;
     if (
       typeof process !== 'undefined' &&
       process.env?.NODE_ENV === 'development'
@@ -29,14 +29,15 @@ class ServiceRegistry {
   }
 
   get<TTable extends PgTable>(name: string): IService<TTable> | undefined {
-    return this.services.get(name) as IService<TTable> | undefined;
+    const service = this.services.get(name);
+    return service as IService<TTable> | undefined;
   }
 
   unregister(name: string): boolean {
     const existed = this.services.has(name);
     if (existed) {
       this.services.delete(name);
-      delete (this as any)[name];
+      delete (this as Record<string, unknown>)[name];
       if (
         typeof process !== 'undefined' &&
         process.env?.NODE_ENV === 'development'
@@ -59,7 +60,7 @@ class ServiceRegistry {
     const serviceNames = this.list();
     this.services.clear();
     serviceNames.forEach((name) => {
-      delete (this as any)[name];
+      delete (this as Record<string, unknown>)[name];
     });
     if (
       typeof process !== 'undefined' &&

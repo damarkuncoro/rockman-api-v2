@@ -8,19 +8,12 @@
 /**
  * Validasi apakah user dapat memiliki alamat default
  */
-export function validateDefaultAddress(addresses: any[]): boolean {
+type Address = { isDefault: boolean };
+export function validateDefaultAddress(addresses: Address[]): boolean {
   const defaultAddresses = addresses.filter(addr => addr.isDefault);
   return defaultAddresses.length <= 1;
 }
 
-/**
- * Validasi format nomor telepon Indonesia
- */
-export function validateIndonesianPhoneNumber(phoneNumber: string): boolean {
-  // Format: +62xxx, 08xxx, atau 62xxx
-  const phoneRegex = /^(\+62|62|0)8[1-9][0-9]{6,11}$/;
-  return phoneRegex.test(phoneNumber);
-}
 
 /**
  * Validasi kode pos Indonesia

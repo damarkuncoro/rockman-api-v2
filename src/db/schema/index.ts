@@ -6,6 +6,7 @@ export * from "./products";
 export * from "./memberships";
 export * from "./outages";
 export * from "./network_equipment";
+export * from "./notifications";
 
 // Entities that depend on the core ones above
 export * from "./users"; // Depends on departments

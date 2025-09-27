@@ -1,3 +1,4 @@
+import { IService } from "@/core/core.interface";
 import { Service } from "../../../../core/core.service";
 import { changeHistory } from "../../../../db/schema/change_history/table";
 import { changeHistoryRepository } from "../../../repositories/database/change_history/change_history.repository";
@@ -8,4 +9,4 @@ class ChangeHistoryService extends Service<typeof changeHistory> {
   }
 }
 
-export const changeHistoryService = new ChangeHistoryService();
+export const changeHistoryService: IService<typeof changeHistory> = new ChangeHistoryService();

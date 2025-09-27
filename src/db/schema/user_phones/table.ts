@@ -1,4 +1,4 @@
-import { pgTable, integer, varchar, boolean, timestamp, foreignKey, uuid } from "drizzle-orm/pg-core";
+import { pgTable, varchar, boolean, timestamp, foreignKey, uuid } from "drizzle-orm/pg-core";
 import { users } from "../users";
 
 export const userPhones = pgTable("user_phones", {

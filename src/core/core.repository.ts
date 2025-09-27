@@ -36,7 +36,7 @@
 import { InferInsertModel, InferSelectModel, eq } from "drizzle-orm"
 import { PgTable } from "drizzle-orm/pg-core"
 import db from "../db"
-import { IRepository } from "./core.interface"
+import { IRepository, TFindPayload, TFindResponse } from "./core.interface"
 
 /**
  * Generic Repository class untuk operasi CRUD database
@@ -71,6 +71,23 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
    */
   constructor(table: TTable) {
     this.table = table
+  }
+
+  async find(
+    payload: TFindPayload,
+  ): Promise<TFindResponse<InferSelectModel<TTable>>> {
+    const { page, pageSize } = payload;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = await db.select().from(this.table as any);
+    const total = data.length;
+    const totalPage = Math.ceil(total / pageSize);
+    return {
+      data: data as InferSelectModel<TTable>[],
+      page,
+      pageSize,
+      total,
+      totalPage,
+    };
   }
 
   /**

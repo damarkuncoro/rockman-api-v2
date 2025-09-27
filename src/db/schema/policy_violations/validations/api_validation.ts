@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { insertPolicyViolationDataSchema } from "./data_validation";
 
 /**
  * Schema validasi API untuk policy violations

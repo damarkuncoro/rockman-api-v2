@@ -1,4 +1,4 @@
-import { pgTable, integer, varchar, uuid } from "drizzle-orm/pg-core";
+import { pgTable, varchar, uuid } from "drizzle-orm/pg-core";
 import { features } from "../features";
 
 export const routeFeatures = pgTable("route_features", {

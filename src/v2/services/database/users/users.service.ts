@@ -1,3 +1,4 @@
+import { IService } from "@/core/core.interface";
 import { Service } from "../../../../core/core.service";
 import { users } from "../../../../db/schema/users/table";
 import { usersRepository } from "../../../repositories/database/users/users.repository";
@@ -16,4 +17,4 @@ class UsersService extends Service<typeof users> {
   // }
 }
 
-export const usersService = new UsersService();
+export const usersService: IService<typeof users> = new UsersService();

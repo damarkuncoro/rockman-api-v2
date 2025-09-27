@@ -1,4 +1,4 @@
-import { pgTable, integer, varchar, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { pgTable, varchar, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { features } from "../features";
 
 export const policies = pgTable("policies", {

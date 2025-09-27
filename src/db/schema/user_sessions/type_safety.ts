@@ -1,8 +1,8 @@
-import { sessions } from "./table";
+import { userSessions } from "./table";
 
 /**
  * TypeScript types untuk sessions
- * 
+ *
  * Domain: Authentication
  * Responsibility: Menyediakan type safety untuk sessions
  */
@@ -10,9 +10,9 @@ import { sessions } from "./table";
 /**
  * Type untuk select session data
  */
-export type Session = typeof sessions.$inferSelect;
+export type Session = typeof userSessions.$inferSelect;
 
 /**
  * Type untuk insert session data
  */
-export type NewSession = typeof sessions.$inferInsert;
+export type NewSession = typeof userSessions.$inferInsert;

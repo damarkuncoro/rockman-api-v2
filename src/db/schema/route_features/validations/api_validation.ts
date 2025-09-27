@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { insertRouteFeatureDataSchema } from "./data_validation";
 
 /**
  * Schema validasi API untuk route features

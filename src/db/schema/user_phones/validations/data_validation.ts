@@ -18,7 +18,8 @@
  * @param phones - Array nomor telepon user
  * @returns boolean - true jika valid (maksimal 1 default)
  */
-export function validateDefaultPhone(phones: any[]): boolean {
+type Phone = { id?: number; isDefault?: boolean; phoneNumber?: string; label: string };
+export function validateDefaultPhone(phones: Phone[]): boolean {
   const defaultPhones = phones.filter(phone => phone.isDefault);
   return defaultPhones.length <= 1;
 }
@@ -69,7 +70,7 @@ export function validateInternationalPhoneNumber(phoneNumber: string, countryCod
  * @param excludeId - ID nomor telepon yang dikecualikan (untuk update)
  * @returns boolean - true jika tidak ada duplikasi
  */
-export function validatePhoneDuplication(phones: any[], newPhone: string, excludeId?: number): boolean {
+export function validatePhoneDuplication(phones: Phone[], newPhone: string, excludeId?: number): boolean {
   const duplicates = phones.filter(phone => 
     phone.phoneNumber === newPhone && phone.id !== excludeId
   );
@@ -85,7 +86,7 @@ export function validatePhoneDuplication(phones: any[], newPhone: string, exclud
  * @param excludeId - ID nomor telepon yang dikecualikan (untuk update)
  * @returns boolean - true jika label tidak duplikat
  */
-export function validatePhoneLabel(phones: any[], newLabel: string, excludeId?: number): boolean {
+export function validatePhoneLabel(phones: Phone[], newLabel: string, excludeId?: number): boolean {
   const duplicates = phones.filter(phone => 
     phone.label.toLowerCase() === newLabel.toLowerCase() && phone.id !== excludeId
   );

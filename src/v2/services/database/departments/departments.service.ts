@@ -1,3 +1,4 @@
+import { IService } from "@/core/core.interface";
 import { Service } from "../../../../core/core.service";
 import { departments } from "../../../../db/schema/departments/table";
 import { departmentsRepository } from "../../../repositories/database/departments/departments.repository";
@@ -8,4 +9,4 @@ class DepartmentsService extends Service<typeof departments> {
   }
 }
 
-export const departmentsService = new DepartmentsService();
+export const departmentsService: IService<typeof departments> = new DepartmentsService();

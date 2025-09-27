@@ -5,15 +5,16 @@ export interface IServiceRegistry {
 }
 
 export interface IRepository<TTable extends PgTable> {
+  find: (payload: TFindPayload) => Promise<TFindResponse<TTable['$inferSelect']>>;
   SELECT: {
-    All: () => Promise<any[]>;
-    ById: (id: number) => Promise<any | null>;
+    All: () => Promise<Array<TTable['$inferSelect']>>;
+    ById: (id: number) => Promise<TTable['$inferSelect'] | null>;
   };
   INSERT: {
-    One: (data: any) => Promise<any>;
+    One: (data: TTable['$inferInsert']) => Promise<TTable['$inferSelect']>;
   };
   UPDATE: {
-    One: (id: number, data: any) => Promise<any | null>;
+    One: (id: number, data: Partial<TTable['$inferInsert']>) => Promise<TTable['$inferSelect'] | null>;
   };
   DELETE: {
     One: (id: number) => Promise<boolean>;
@@ -21,15 +22,16 @@ export interface IRepository<TTable extends PgTable> {
 }
 
 export interface IService<TTable extends PgTable> {
+  find: (payload: TFindPayload) => Promise<TFindResponse<TTable['$inferSelect']>>;
   GET: {
-    All: () => Promise<any[]>;
-    ById: (id: number) => Promise<any | null>;
+    All: () => Promise<Array<TTable['$inferSelect']>>;
+    ById: (id: number) => Promise<TTable['$inferSelect'] | null>;
   };
   POST: {
-    Create: (data: any) => Promise<any>;
+    Create: (data: TTable['$inferInsert']) => Promise<TTable['$inferSelect']>;
   };
   PUT: {
-    Update: (id: number, data: any) => Promise<any | null>;
+    Update: (id: number, data: Partial<TTable['$inferInsert']>) => Promise<TTable['$inferSelect'] | null>;
   };
   DELETE: {
     Remove: (id: number) => Promise<boolean>;
@@ -41,3 +43,19 @@ export interface IServiceConfig {
   enableValidation?: boolean;
   enableCaching?: boolean;
 }
+export type TFindPayload = {
+  page: number;
+  pageSize: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  filters?: Record<string, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sort?: Record<string, any>;
+};
+
+export type TFindResponse<T> = {
+  data: T[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPage: number;
+};

@@ -22,14 +22,3 @@ import { features } from "../features/table";
 export const featureCategoriesRelations = relations(featureCategories, ({ many }) => ({
   features: many(features),
 }));
-
-/**
- * Relasi many-to-one: banyak fitur memiliki satu kategori
- * Digunakan untuk query fitur dengan kategorinya
- */
-export const featuresRelations = relations(features, ({ one }) => ({
-  category: one(featureCategories, {
-    fields: [features.categoryId],
-    references: [featureCategories.id],
-  }),
-}));

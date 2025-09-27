@@ -44,7 +44,7 @@
 
 import { InferSelectModel, InferInsertModel } from "drizzle-orm"
 import { PgTable } from "drizzle-orm/pg-core"
-import { IRepository, IService, IServiceConfig } from "./core.interface"
+import { IRepository, IService, IServiceConfig, TFindPayload, TFindResponse } from "./core.interface"
 
 /**
  * Generic Service class untuk business logic layer
@@ -92,6 +92,15 @@ export class Service<TTable extends PgTable> implements IService<TTable> {
       enableCaching: false,
       ...config
     }
+  }
+
+  public async find(
+    payload: TFindPayload,
+  ): Promise<TFindResponse<InferSelectModel<TTable>>> {
+    if (this.config.enableLogging) {
+      console.log("Service.find() called");
+    }
+    return this.repository.find(payload);
   }
 
   /**
