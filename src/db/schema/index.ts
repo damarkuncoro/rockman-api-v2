@@ -36,3 +36,16 @@ export * from "./change_history"; // Depends on users
 export * from "./policy_violations"; // Depends on users, policies
 export * from "./knowledge_base_articles";
 export * from "./ticket_to_knowledge_base";
+
+// Billing System
+export * from "./billing/subscriptions";
+export * from "./billing/invoices";
+export * from "./billing/invoice_items";
+export * from "./billing/payments";
+export * from "./billing/discounts";
+export * from "./billing/subscription_discounts";
+export * from "./billing/taxes";
+export * from "./billing/one_time_charges";
+export * from "./billing/payment_methods";
+export * from "./billing/credit_notes";
+export * from "./billing/credit_note_applications";

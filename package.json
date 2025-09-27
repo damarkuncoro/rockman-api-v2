@@ -10,6 +10,7 @@
     "db:scripts": "--- DATABASE SCRIPTS ---",
     "db:push": "drizzle-kit push --config ./drizzle.config.ts",
     "db:generate": "drizzle-kit generate --config ./drizzle.config.ts",
+    "db:generate:force": "tsx -r tsconfig-paths/register ./generate.ts",
     "db:migrate": "tsx -r tsconfig-paths/register ./src/db/migrate.ts",
     "db:drop": "tsx -r tsconfig-paths/register ./src/db/drop.ts",
     "db:studio": "drizzle-kit studio",

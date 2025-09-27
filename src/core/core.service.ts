@@ -152,7 +152,7 @@ export class Service<TTable extends PgTable> implements IService<TTable> {
      *   console.log('User not found or inactive')
      * }
      */
-    ById: async (id: number): Promise<InferSelectModel<TTable> | null> => {
+    ById: async (id: number | string): Promise<InferSelectModel<TTable> | null> => {
       if (this.config.enableLogging) {
         console.log(`Service.GET.ById(${id}) called`)
       }
@@ -237,13 +237,13 @@ export class Service<TTable extends PgTable> implements IService<TTable> {
      *   await notifyPriceChange(product)
      * }
      */
-    Update: async (id: number, data: Partial<InferInsertModel<TTable>>): Promise<InferSelectModel<TTable> | null> => {
+    Update: async (id: number | string, data: Partial<InferInsertModel<TTable>>): Promise<InferSelectModel<TTable> | null> => {
       if (this.config.enableLogging) {
         console.log(`Service.PUT.Update(${id}) called`, data)
       }
       return this.repository.UPDATE.One(id, data)
     },
-     ID: async (id: number, data: Partial<InferInsertModel<TTable>>): Promise<InferSelectModel<TTable> | null> => {
+     ID: async (id: number | string, data: Partial<InferInsertModel<TTable>>): Promise<InferSelectModel<TTable> | null> => {
       if (this.config.enableLogging) {
         console.log(`Service.PUT.ID(${id}) called`, data)
       }
@@ -289,14 +289,14 @@ export class Service<TTable extends PgTable> implements IService<TTable> {
      *   console.error('Delete failed:', error.message)
      * }
      */
-    Remove: async (id: number): Promise<boolean> => {
+    Remove: async (id: number | string): Promise<boolean> => {
       if (this.config.enableLogging) {
         console.log(`Service.DELETE.Remove(${id}) called`)
       }
       return this.repository.DELETE.One(id)
     },
     
-    ID: async (id: number): Promise<boolean> => {
+    ID: async (id: number | string): Promise<boolean> => {
       if (this.config.enableLogging) {
         console.log(`Service.DELETE.ID(${id}) called`)
       }
@@ -372,7 +372,7 @@ export class Service<TTable extends PgTable> implements IService<TTable> {
      *   { id: 2, data: { price: 299.99 } }
      * ])
      */
-    Update: async (updates: Array<{ id: number; data: Partial<InferInsertModel<TTable>> }>): Promise<InferSelectModel<TTable>[]> => {
+    Update: async (updates: Array<{ id: number | string; data: Partial<InferInsertModel<TTable>> }>): Promise<InferSelectModel<TTable>[]> => {
       if (this.config.enableLogging) {
         console.log(`Service.BULK.Update() called with ${updates.length} items`)
       }
@@ -402,7 +402,7 @@ export class Service<TTable extends PgTable> implements IService<TTable> {
      * const deletedCount = await productsService.BULK.Remove([1, 2, 3])
      * console.log(`Deleted ${deletedCount} products`)
      */
-    Remove: async (ids: number[]): Promise<number> => {
+    Remove: async (ids: (number | string)[]): Promise<number> => {
       if (this.config.enableLogging) {
         console.log(`Service.BULK.Remove() called with ${ids.length} items`)
       }
@@ -539,7 +539,7 @@ export class Service<TTable extends PgTable> implements IService<TTable> {
      *   throw new Error('User not found')
      * }
      */
-    Exists: async (id: number): Promise<boolean> => {
+    Exists: async (id: number | string): Promise<boolean> => {
       if (this.config.enableLogging) {
         console.log(`Service.QUERY.Exists(${id}) called`)
       }

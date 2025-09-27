@@ -1,3 +1,17 @@
+// Billing
+import "./subscriptions";
+import "./invoices";
+import "./invoice_items";
+import "./payments";
+import "./discounts";
+import "./subscription_discounts";
+import "./taxes";
+import "./one_time_charges";
+import "./payment_methods";
+import "./credit_notes";
+import "./credit_note_applications";
+
+// Existing
 import "./access_logs";
 import "./change_history";
 import "./customer_equipment";

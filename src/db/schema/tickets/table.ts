@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, text, timestamp, pgEnum, index } from "drizzle-orm/pg-core";
 import { users } from "../users";
 
 export const ticketCategoryEnum = pgEnum("ticket_category", ["network", "billing", "service_request"]);
@@ -15,4 +15,10 @@ export const tickets = pgTable("tickets", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+}, (table) => {
+  return {
+    statusIdx: index("tickets_status_idx").on(table.status),
+    priorityIdx: index("tickets_priority_idx").on(table.priority),
+    categoryIdx: index("tickets_category_idx").on(table.category),
+  };
 });

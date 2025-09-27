@@ -132,7 +132,7 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
      *   console.log('User not found')
      * }
      */
-    ById: async (id: number): Promise<InferSelectModel<TTable> | null> => {
+    ById: async (id: number | string): Promise<InferSelectModel<TTable> | null> => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rows = await db.select().from(this.table as any).where(eq((this.table as any).id, id))
@@ -232,7 +232,7 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
      *   console.log(`Product updated: ${product.name} - $${product.price}`)
      * }
      */
-    One: async (id: number, values: Partial<InferInsertModel<TTable>>): Promise<InferSelectModel<TTable> | null> => {
+    One: async (id: number | string, values: Partial<InferInsertModel<TTable>>): Promise<InferSelectModel<TTable> | null> => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const rows = await db.update(this.table as any).set(values).where(eq((this.table as any).id, id)).returning() as any[]
       return rows.length > 0 ? rows[0] as InferSelectModel<TTable> : null
@@ -270,7 +270,7 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
      *   console.error('Delete failed:', error.message)
      * }
      */
-    One: async (id: number): Promise<boolean> => {
+    One: async (id: number | string): Promise<boolean> => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await db.delete(this.table as any).where(eq((this.table as any).id, id)).returning() as any[]
       return result.length > 0

@@ -8,16 +8,16 @@ export interface IRepository<TTable extends PgTable> {
   find: (payload: TFindPayload) => Promise<TFindResponse<TTable['$inferSelect']>>;
   SELECT: {
     All: () => Promise<Array<TTable['$inferSelect']>>;
-    ById: (id: number) => Promise<TTable['$inferSelect'] | null>;
+    ById: (id: number | string) => Promise<TTable['$inferSelect'] | null>;
   };
   INSERT: {
     One: (data: TTable['$inferInsert']) => Promise<TTable['$inferSelect']>;
   };
   UPDATE: {
-    One: (id: number, data: Partial<TTable['$inferInsert']>) => Promise<TTable['$inferSelect'] | null>;
+    One: (id: number | string, data: Partial<TTable['$inferInsert']>) => Promise<TTable['$inferSelect'] | null>;
   };
   DELETE: {
-    One: (id: number) => Promise<boolean>;
+    One: (id: number | string) => Promise<boolean>;
   };
 }
 
@@ -25,16 +25,16 @@ export interface IService<TTable extends PgTable> {
   find: (payload: TFindPayload) => Promise<TFindResponse<TTable['$inferSelect']>>;
   GET: {
     All: () => Promise<Array<TTable['$inferSelect']>>;
-    ById: (id: number) => Promise<TTable['$inferSelect'] | null>;
+    ById: (id: number | string) => Promise<TTable['$inferSelect'] | null>;
   };
   POST: {
     Create: (data: TTable['$inferInsert']) => Promise<TTable['$inferSelect']>;
   };
   PUT: {
-    Update: (id: number, data: Partial<TTable['$inferInsert']>) => Promise<TTable['$inferSelect'] | null>;
+    Update: (id: number | string, data: Partial<TTable['$inferInsert']>) => Promise<TTable['$inferSelect'] | null>;
   };
   DELETE: {
-    Remove: (id: number) => Promise<boolean>;
+    Remove: (id: number | string) => Promise<boolean>;
   };
 }
 
