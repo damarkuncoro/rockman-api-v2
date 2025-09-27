@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { StatusCodes } from 'http-status-codes';
 
-import { userService } from '@/v2/services/database/users/users.service';
+import { SERVICE } from '@/v2/services/services';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const newUser = await userService.POST.Create(body);
+    const newUser = await SERVICE.users.POST.Create(body);
     return NextResponse.json({ message: 'User created successfully', user: newUser });
   } catch (error) {
     console.error('Error creating user:', error);

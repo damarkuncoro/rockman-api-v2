@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { StatusCodes } from 'http-status-codes';
 
-import { userService } from '@/v2/services/database/users/users.service';
+import { SERVICE } from '@/v2/services/services';
 
 export async function GET() {
   try {
-    const users = await userService.GET.All();
+    const users = await SERVICE.users.GET.All();
     return NextResponse.json({ message: 'Users fetched successfully', users });
   } catch (error) {
     console.error('Error fetching users:', error);
