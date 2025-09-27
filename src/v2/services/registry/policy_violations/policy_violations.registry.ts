@@ -1,4 +1,4 @@
-import SERVICE from "../../../../core/core.service.registry";
-import { policyViolationsService } from "../../database/policy_violations/policy_violations.service";
+import SERVICE from "@/core/core.service.registry";
+import { policyViolationsService } from "@/v2/services/database/policy_violations";
 
 SERVICE.register("policyViolations", policyViolationsService);

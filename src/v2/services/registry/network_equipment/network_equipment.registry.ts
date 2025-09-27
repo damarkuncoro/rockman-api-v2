@@ -1,4 +1,4 @@
-import SERVICE from "../../../../core/core.service.registry";
-import { networkEquipmentService } from "../../database/network_equipment/network_equipment.service";
+import SERVICE from "@/core/core.service.registry";
+import { networkEquipmentService } from "@/v2/services/database/network_equipment";
 
 SERVICE.register("networkEquipment", networkEquipmentService);

@@ -1,7 +1,7 @@
 import { IService } from "@/core/core.interface";
-import { Service } from "../../../../core/core.service";
-import { policyViolations } from "../../../../db/schema/policy_violations/table";
-import { policyViolationsRepository } from "../../../repositories/database/policy_violations/policy_violations.repository";
+import { Service } from "@/core/core.service";
+import { policyViolations } from "@/db/schema/policy_violations/table";
+import { policyViolationsRepository } from "@/v2/repositories/database/policy_violations";
 
 class PolicyViolationsService extends Service<typeof policyViolations> {
   constructor() {

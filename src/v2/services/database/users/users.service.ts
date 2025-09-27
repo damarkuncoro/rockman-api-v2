@@ -1,7 +1,7 @@
 import { IService } from "@/core/core.interface";
-import { Service } from "../../../../core/core.service";
-import { users } from "../../../../db/schema/users/table";
-import { usersRepository } from "../../../repositories/database/users/users.repository";
+import { Service } from "@/core/core.service";
+import { users } from "@/db/schema/users/table";
+import { usersRepository } from "@/v2/repositories/database/users/users.repository";
 
 class UsersService extends Service<typeof users> {
   constructor() {

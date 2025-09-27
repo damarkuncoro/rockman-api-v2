@@ -1,7 +1,7 @@
 import { IService } from "@/core/core.interface";
-import { Service } from "../../../../core/core.service";
-import { userRoles } from "../../../../db/schema/user_roles/table";
-import { userRolesRepository } from "../../../repositories/database/user_roles/user_roles.repository";
+import { Service } from "@/core/core.service";
+import { userRoles } from "@/db/schema/user_roles/table";
+import { userRolesRepository } from "@/v2/repositories/database/user_roles";
 
 class UserRolesService extends Service<typeof userRoles> {
   constructor() {

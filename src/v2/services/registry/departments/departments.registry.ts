@@ -1,4 +1,4 @@
-import SERVICE from "../../../../core/core.service.registry";
-import { departmentsService } from "../../database/departments/departments.service";
+import SERVICE from "@/core/core.service.registry";
+import { departmentsService } from "@/v2/services/database/departments";
 
 SERVICE.register("departments", departmentsService);

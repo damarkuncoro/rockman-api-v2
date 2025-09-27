@@ -1,7 +1,7 @@
 import { IService } from "@/core/core.interface";
-import { Service } from "../../../../core/core.service";
-import { ticketToKnowledgeBase } from "../../../../db/schema/ticket_to_knowledge_base/table";
-import { ticketToKnowledgeBaseRepository } from "../../../repositories/database/ticket_to_knowledge_base/ticket_to_knowledge_base.repository";
+import { Service } from "@/core/core.service";
+import { ticketToKnowledgeBase } from "@/db/schema/ticket_to_knowledge_base/table";
+import { ticketToKnowledgeBaseRepository } from "@/v2/repositories/database/ticket_to_knowledge_base";
 
 class TicketToKnowledgeBaseService extends Service<typeof ticketToKnowledgeBase> {
   constructor() {
