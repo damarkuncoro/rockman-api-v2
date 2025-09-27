@@ -43,3 +43,12 @@ import "./user_products";
 import "./user_roles";
 import "./user_sessions";
 import "./users";
+
+// Employee and Customer Management
+import "./user_employees";
+import "./user_customers";
+import "./positions";
+import "./employment_history";
+import "./leave_requests";
+import "./performance_reviews";
+import "./payrolls";

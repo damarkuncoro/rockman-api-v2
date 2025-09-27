@@ -6,6 +6,5 @@ export const features = pgTable("features", {
   name: varchar("name", { length: 100 }).notNull().unique(),
   description: text("description"),
   categoryId: uuid("category_id").references(() => featureCategories.id),
-  category: varchar("category", { length: 50 }).default("General"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });

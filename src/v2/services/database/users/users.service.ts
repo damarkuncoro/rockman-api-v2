@@ -1,20 +1,26 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { users } from "@/db/schema/users/table";
-import { usersRepository } from "@/v2/repositories/database/users/users.repository";
+import { Service as CoreService } from '../../../../core/core.service';
+import { IService } from '@/core/core.interface';
+import { users } from '../../../../db/schema';
+import { usersRepository } from '../../../repositories/database/users/users.repository';
 
-class UsersService extends Service<typeof users> {
+class UsersService extends CoreService<typeof users> {
   constructor() {
     super(usersRepository);
   }
 
-  // You can add user-specific service methods here
-  // For example:
-  // async findUserByEmail(email: string) {
-  //   const user = await (this.repository as typeof usersRepository).findByEmail(email);
-  //   // add business logic here
-  //   return user;
-  // }
+  async createUser(userData: typeof users.$inferInsert) {
+    // Business logic for creating a user will go here
+    // For now, just a placeholder
+    console.log('Creating user with data:', userData);
+    return { ...userData, id: 'new-user-id' };
+  }
+
+  async getUsers() {
+    // Business logic for fetching users will go here
+    // For now, just a placeholder
+    console.log('Fetching all users');
+    return [];
+  }
 }
 
-export const usersService: IService<typeof users> = new UsersService();
+export const userService: IService<typeof users> = new UsersService();
