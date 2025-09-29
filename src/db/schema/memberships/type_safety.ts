@@ -1,4 +1,5 @@
-import { memberships } from ".";
+import { memberships } from "./table";
+import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
-export type Membership = typeof memberships.$inferSelect;
-export type NewMembership = typeof memberships.$inferInsert;
+export type SelectMembership = InferSelectModel<typeof memberships>;
+export type InsertMembership = InferInsertModel<typeof memberships>;

@@ -1,4 +1,5 @@
-import { loyaltyPoints } from ".";
+import { loyaltyPoints } from "./table";
+import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
-export type LoyaltyPoint = typeof loyaltyPoints.$inferSelect;
-export type NewLoyaltyPoint = typeof loyaltyPoints.$inferInsert;
+export type SelectLoyaltyPoint = InferSelectModel<typeof loyaltyPoints>;
+export type InsertLoyaltyPoint = InferInsertModel<typeof loyaltyPoints>;

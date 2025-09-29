@@ -1,10 +1,5 @@
 import { features } from "./table";
+import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
-/**
- * TypeScript types untuk type safety features
- * 
- * Domain: RBAC
- * Responsibility: Menyediakan type safety untuk features
- */
-export type Feature = typeof features.$inferSelect;
-export type NewFeature = typeof features.$inferInsert;
+export type SelectFeature = InferSelectModel<typeof features>;
+export type InsertFeature = InferInsertModel<typeof features>;

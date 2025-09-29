@@ -1,18 +1,27 @@
-import { NextResponse } from 'next/server';
 import { StatusCodes } from 'http-status-codes';
+import { NextRequest, NextResponse } from 'next/server';
+import { usersService } from '@/v2/services/database/users';
 
-import { SERVICE } from '@/v2/services/services';
+import { z } from 'zod';
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const newUser = await SERVICE.users.POST.Create(body);
-    return NextResponse.json({ message: 'User created successfully', user: newUser });
-  } catch (error) {
-    console.error('Error creating user:', error);
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR },
-    );
+const schema = z.object({
+  email: z.string().email(),
+  username: z.string(),
+  passwordHash: z.string(),
+});
+
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+
+  const parsed = schema.safeParse(body);
+
+  if (!parsed.success) {
+    return NextResponse.json(parsed.error, {
+      status: StatusCodes.BAD_REQUEST,
+    });
   }
+
+  const user = await usersService.POST.Create(parsed.data);
+
+  return NextResponse.json(user, { status: StatusCodes.CREATED });
 }

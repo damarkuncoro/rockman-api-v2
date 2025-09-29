@@ -1,12 +1,13 @@
-import { pgTable, uuid, date, integer, text } from 'drizzle-orm/pg-core';
-import { userEmployees } from '../user_employees';
+import { pgTable, uuid, date, text } from 'drizzle-orm/pg-core';
+import { employees } from '../employees';
 import { users } from '../users';
+import { performanceRatingEnum } from '../_common/enums';
 
 export const performanceReviews = pgTable('performance_reviews', {
   id: uuid('id').primaryKey().defaultRandom(),
-  employeeId: uuid('employee_id').references(() => userEmployees.id),
+  employeeId: uuid('employee_id').references(() => employees.id),
   reviewerId: uuid('reviewer_id').references(() => users.id),
   reviewDate: date('review_date').notNull(),
-  rating: integer('rating').notNull(),
+  rating: performanceRatingEnum('rating').notNull(),
   comments: text('comments'),
 });

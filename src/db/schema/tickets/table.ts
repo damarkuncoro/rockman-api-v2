@@ -1,5 +1,6 @@
 import { pgTable, uuid, varchar, text, timestamp, pgEnum, index } from "drizzle-orm/pg-core";
 import { users } from "../users";
+import { ticketStatusEnum, ticketPriorityEnum } from "../_common/enums";
 
 export const ticketCategoryEnum = pgEnum("ticket_category", ["network", "billing", "service_request"]);
 
@@ -9,8 +10,8 @@ export const tickets = pgTable("tickets", {
   assignedTo: uuid("assigned_to").references(() => users.id, { onDelete: "set null" }),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description").notNull(),
-  status: varchar("status", { length: 50 }).notNull(), // e.g., open, in_progress, closed
-  priority: varchar("priority", { length: 50 }), // e.g., low, medium, high
+  status: ticketStatusEnum("status").notNull(),
+  priority: ticketPriorityEnum("priority"),
   category: ticketCategoryEnum("category").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),

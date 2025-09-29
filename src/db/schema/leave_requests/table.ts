@@ -1,12 +1,13 @@
-import { pgTable, uuid, varchar, date, text } from 'drizzle-orm/pg-core';
-import { userEmployees } from '../user_employees';
+import { pgTable, uuid, date, text } from 'drizzle-orm/pg-core';
+import { employees } from '../employees';
+import { leaveRequestStatusEnum, leaveTypeEnum } from '../_common/enums';
 
 export const leaveRequests = pgTable('leave_requests', {
   id: uuid('id').primaryKey().defaultRandom(),
-  employeeId: uuid('employee_id').references(() => userEmployees.id),
-  leaveType: varchar('leave_type', { length: 100 }).notNull(),
+  employeeId: uuid('employee_id').references(() => employees.id),
+  leaveType: leaveTypeEnum('leave_type').notNull(),
   startDate: date('start_date').notNull(),
   endDate: date('end_date').notNull(),
-  status: varchar('status', { length: 50 }).notNull(),
+  status: leaveRequestStatusEnum('status').notNull(),
   reason: text('reason'),
 });

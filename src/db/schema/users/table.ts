@@ -1,4 +1,4 @@
-import { pgTable, integer, varchar, text, boolean, timestamp, date, uuid } from "drizzle-orm/pg-core";
+import { pgTable, integer, varchar, text, boolean, timestamp, uuid } from "drizzle-orm/pg-core";
 import { departments } from "../departments";
 
 /**
@@ -7,7 +7,6 @@ import { departments } from "../departments";
  */
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: varchar("name", { length: 100 }).notNull(),
   username: varchar("username", { length: 50 }).notNull().unique(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   passwordHash: text("password_hash").notNull(),
@@ -18,13 +17,7 @@ export const users = pgTable("users", {
   region: varchar("region", { length: 100 }),
   level: integer("level"), // seniority/grade level
   
-  // ABAC attributes untuk Customer
-  customerType: varchar("customer_type", { length: 50 }), // personal, business, enterprise
-  customerTier: varchar("customer_tier", { length: 50 }), // basic, premium, vip
-  customerSince: date("customer_since"), // tanggal menjadi customer
-  customerStatus: varchar("customer_status", { length: 50 }), // active, inactive, suspended
-  customerSegment: varchar("customer_segment", { length: 100 }), // segmentasi customer (retail, corporate, dll)
-  
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true }),
 });

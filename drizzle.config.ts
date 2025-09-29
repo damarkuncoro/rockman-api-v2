@@ -4,7 +4,10 @@ import "tsconfig-paths/register";
 
 export default defineConfig({
   dialect: "postgresql",
-  schema: resolve(__dirname, "src/db/schema/index.ts"),
+  schema: [
+    resolve(__dirname, "src/db/schema/_common/enums.ts"),
+    resolve(__dirname, "src/db/schema/index.ts")
+  ],
   out: "./drizzle",
   dbCredentials: {
     url: process.env.DATABASE_URL!,

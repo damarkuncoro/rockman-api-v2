@@ -5,4 +5,5 @@ export const roles = pgTable("roles", {
   name: varchar("name", { length: 100 }).notNull().unique(),
   grantsAll: boolean("grants_all").default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true }),
 });

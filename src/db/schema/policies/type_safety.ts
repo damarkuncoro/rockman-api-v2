@@ -1,10 +1,5 @@
 import { policies } from "./table";
+import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
-/**
- * TypeScript types untuk type safety policies
- * 
- * Domain: RBAC/ABAC
- * Responsibility: Menyediakan type safety untuk policies
- */
-export type Policy = typeof policies.$inferSelect;
-export type NewPolicy = typeof policies.$inferInsert;
+export type SelectPolicy = InferSelectModel<typeof policies>;
+export type InsertPolicy = InferInsertModel<typeof policies>;

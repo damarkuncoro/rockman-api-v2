@@ -38,7 +38,7 @@ export const loginSchema = z.object({
 /**
  * Update user ABAC attributes schema
  */
-export const updateUserAbacSchema = z.object({
+export const updateUserSchema = z.object({
   department: z.string().max(100, "Department maksimal 100 karakter").optional(),
   region: z.string().max(100, "Region maksimal 100 karakter").optional(),
   level: z.number().int().min(1, "Level minimal 1").max(10, "Level maksimal 10").optional(),
@@ -55,4 +55,4 @@ export const updateUserAbacSchema = z.object({
  */
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
-export type UpdateUserAbacInput = z.infer<typeof updateUserAbacSchema>;
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;

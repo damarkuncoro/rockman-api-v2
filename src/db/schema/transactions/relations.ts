@@ -1,15 +1,15 @@
 import { relations } from "drizzle-orm";
 import { transactions } from "./table";
 import { users } from "../users";
-import { userProducts } from "../user_products";
+import { payments } from "../billing/payments";
 
 export const transactionsRelations = relations(transactions, ({ one }) => ({
   user: one(users, {
     fields: [transactions.userId],
     references: [users.id],
   }),
-  userProduct: one(userProducts, {
-    fields: [transactions.userProductId],
-    references: [userProducts.id],
+  payment: one(payments, {
+    fields: [transactions.paymentId],
+    references: [payments.id],
   }),
 }));

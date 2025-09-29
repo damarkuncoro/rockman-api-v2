@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, boolean, timestamp, index } from "drizzle-orm/pg-core";
 import { users } from "../users";
 
 export const notifications = pgTable("notifications", {
@@ -7,4 +7,8 @@ export const notifications = pgTable("notifications", {
   message: text("message").notNull(),
   isRead: boolean("is_read").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => {
+  return {
+    userIdx: index("notifications_user_id_idx").on(table.userId),
+  };
 });

@@ -7,4 +7,5 @@ export const features = pgTable("features", {
   description: text("description"),
   categoryId: uuid("category_id").references(() => featureCategories.id),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true }),
 });

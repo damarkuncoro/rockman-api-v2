@@ -1,5 +1,5 @@
 {
-  "id": "f09bdfb7-eb93-422b-a6dc-54f9d155855f",
+  "id": "39963f88-9c5b-4699-a2d0-4f4ed5e1445f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -79,6 +79,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -141,6 +147,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -228,6 +240,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -295,6 +313,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -528,7 +552,23 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "notifications_user_id_idx": {
+          "name": "notifications_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "notifications_user_id_users_id_fk": {
           "name": "notifications_user_id_users_id_fk",
@@ -561,9 +601,9 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(100)",
+        "username": {
+          "name": "username",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
@@ -610,36 +650,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "customer_type": {
-          "name": "customer_type",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "customer_tier": {
-          "name": "customer_tier",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "customer_since": {
-          "name": "customer_since",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "customer_status": {
-          "name": "customer_status",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "customer_segment": {
-          "name": "customer_segment",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
@@ -653,6 +663,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -673,6 +689,13 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        },
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
@@ -714,19 +737,18 @@
           "primaryKey": false,
           "notNull": false
         },
-        "category": {
-          "name": "category",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'General'"
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -1568,13 +1590,15 @@
         },
         "status": {
           "name": "status",
-          "type": "varchar(50)",
+          "type": "ticket_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "priority": {
           "name": "priority",
-          "type": "varchar(50)",
+          "type": "ticket_priority",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -1704,8 +1728,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "user_product_id": {
-          "name": "user_product_id",
+        "payment_id": {
+          "name": "payment_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -1716,9 +1740,16 @@
           "primaryKey": false,
           "notNull": true
         },
+        "user_product_id": {
+          "name": "user_product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "status": {
           "name": "status",
-          "type": "varchar(50)",
+          "type": "transaction_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -1736,7 +1767,23 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "transactions_user_id_idx": {
+          "name": "transactions_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "transactions_user_id_users_id_fk": {
           "name": "transactions_user_id_users_id_fk",
@@ -1751,6 +1798,19 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
+        "transactions_payment_id_payments_id_fk": {
+          "name": "transactions_payment_id_payments_id_fk",
+          "tableFrom": "transactions",
+          "tableTo": "payments",
+          "columnsFrom": [
+            "payment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "transactions_user_product_id_user_products_id_fk": {
           "name": "transactions_user_product_id_user_products_id_fk",
           "tableFrom": "transactions",
@@ -1761,7 +1821,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -2181,7 +2241,7 @@
         },
         "record_id": {
           "name": "record_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -2479,7 +2539,8 @@
         },
         "status": {
           "name": "status",
-          "type": "varchar(50)",
+          "type": "subscription_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -2520,9 +2581,31 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "subscriptions_user_id_idx": {
+          "name": "subscriptions_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "subscriptions_user_id_users_id_fk": {
           "name": "subscriptions_user_id_users_id_fk",
@@ -2580,6 +2663,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "invoice_number": {
           "name": "invoice_number",
           "type": "varchar(100)",
@@ -2606,7 +2695,8 @@
         },
         "status": {
           "name": "status",
-          "type": "varchar(50)",
+          "type": "invoice_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -2623,6 +2713,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -2662,6 +2758,19 @@
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "invoices_customer_id_customers_id_fk": {
+          "name": "invoices_customer_id_customers_id_fk",
+          "tableFrom": "invoices",
+          "tableTo": "customers",
+          "columnsFrom": [
+            "customer_id"
           ],
           "columnsTo": [
             "id"
@@ -2779,8 +2888,20 @@
           "primaryKey": false,
           "notNull": false
         },
+        "payroll_id": {
+          "name": "payroll_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "user_id": {
           "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customer_id": {
+          "name": "customer_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
@@ -2803,15 +2924,16 @@
           "primaryKey": false,
           "notNull": true
         },
-        "transaction_id": {
-          "name": "transaction_id",
+        "gateway_transaction_id": {
+          "name": "gateway_transaction_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
         "status": {
           "name": "status",
-          "type": "varchar(50)",
+          "type": "payment_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -2830,7 +2952,23 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "payments_user_id_idx": {
+          "name": "payments_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "payments_invoice_id_invoices_id_fk": {
           "name": "payments_invoice_id_invoices_id_fk",
@@ -2845,12 +2983,38 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
+        "payments_payroll_id_payrolls_id_fk": {
+          "name": "payments_payroll_id_payrolls_id_fk",
+          "tableFrom": "payments",
+          "tableTo": "payrolls",
+          "columnsFrom": [
+            "payroll_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "payments_user_id_users_id_fk": {
           "name": "payments_user_id_users_id_fk",
           "tableFrom": "payments",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "payments_customer_id_customers_id_fk": {
+          "name": "payments_customer_id_customers_id_fk",
+          "tableFrom": "payments",
+          "tableTo": "customers",
+          "columnsFrom": [
+            "customer_id"
           ],
           "columnsTo": [
             "id"
@@ -2884,7 +3048,8 @@
         },
         "discount_type": {
           "name": "discount_type",
-          "type": "varchar(50)",
+          "type": "discount_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -2896,7 +3061,8 @@
         },
         "duration": {
           "name": "duration",
-          "type": "varchar(50)",
+          "type": "discount_duration",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -3277,7 +3443,8 @@
         },
         "status": {
           "name": "status",
-          "type": "varchar(50)",
+          "type": "credit_note_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -3423,8 +3590,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.user_employees": {
-      "name": "user_employees",
+    "public.employees": {
+      "name": "employees",
       "schema": "",
       "columns": {
         "id": {
@@ -3460,13 +3627,15 @@
         },
         "gender": {
           "name": "gender",
-          "type": "varchar(50)",
+          "type": "gender",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
         "marital_status": {
           "name": "marital_status",
-          "type": "varchar(50)",
+          "type": "marital_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -3493,13 +3662,19 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "user_employees_user_id_users_id_fk": {
-          "name": "user_employees_user_id_users_id_fk",
-          "tableFrom": "user_employees",
+        "employees_user_id_users_id_fk": {
+          "name": "employees_user_id_users_id_fk",
+          "tableFrom": "employees",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -3517,8 +3692,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.user_customers": {
-      "name": "user_customers",
+    "public.customers": {
+      "name": "customers",
       "schema": "",
       "columns": {
         "id": {
@@ -3554,7 +3729,8 @@
         },
         "customer_status": {
           "name": "customer_status",
-          "type": "varchar(50)",
+          "type": "customer_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -3563,13 +3739,19 @@
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "user_customers_user_id_users_id_fk": {
-          "name": "user_customers_user_id_users_id_fk",
-          "tableFrom": "user_customers",
+        "customers_user_id_users_id_fk": {
+          "name": "customers_user_id_users_id_fk",
+          "tableFrom": "customers",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -3677,10 +3859,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "employment_history_employee_id_user_employees_id_fk": {
-          "name": "employment_history_employee_id_user_employees_id_fk",
+        "employment_history_employee_id_employees_id_fk": {
+          "name": "employment_history_employee_id_employees_id_fk",
           "tableFrom": "employment_history",
-          "tableTo": "user_employees",
+          "tableTo": "employees",
           "columnsFrom": [
             "employee_id"
           ],
@@ -3729,7 +3911,8 @@
         },
         "leave_type": {
           "name": "leave_type",
-          "type": "varchar(100)",
+          "type": "leave_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -3747,7 +3930,8 @@
         },
         "status": {
           "name": "status",
-          "type": "varchar(50)",
+          "type": "leave_request_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -3760,10 +3944,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "leave_requests_employee_id_user_employees_id_fk": {
-          "name": "leave_requests_employee_id_user_employees_id_fk",
+        "leave_requests_employee_id_employees_id_fk": {
+          "name": "leave_requests_employee_id_employees_id_fk",
           "tableFrom": "leave_requests",
-          "tableTo": "user_employees",
+          "tableTo": "employees",
           "columnsFrom": [
             "employee_id"
           ],
@@ -3811,7 +3995,8 @@
         },
         "rating": {
           "name": "rating",
-          "type": "integer",
+          "type": "performance_rating",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -3824,10 +4009,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "performance_reviews_employee_id_user_employees_id_fk": {
-          "name": "performance_reviews_employee_id_user_employees_id_fk",
+        "performance_reviews_employee_id_employees_id_fk": {
+          "name": "performance_reviews_employee_id_employees_id_fk",
           "tableFrom": "performance_reviews",
-          "tableTo": "user_employees",
+          "tableTo": "employees",
           "columnsFrom": [
             "employee_id"
           ],
@@ -3909,16 +4094,57 @@
           "type": "date",
           "primaryKey": false,
           "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "payroll_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'Draft'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "approved_by": {
+          "name": "approved_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "payrolls_employee_id_user_employees_id_fk": {
-          "name": "payrolls_employee_id_user_employees_id_fk",
+        "payrolls_employee_id_employees_id_fk": {
+          "name": "payrolls_employee_id_employees_id_fk",
           "tableFrom": "payrolls",
-          "tableTo": "user_employees",
+          "tableTo": "employees",
           "columnsFrom": [
             "employee_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "payrolls_approved_by_users_id_fk": {
+          "name": "payrolls_approved_by_users_id_fk",
+          "tableFrom": "payrolls",
+          "tableTo": "users",
+          "columnsFrom": [
+            "approved_by"
           ],
           "columnsTo": [
             "id"
@@ -3932,9 +4158,220 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.user_customers": {
+      "name": "user_customers",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_customers_user_id_users_id_fk": {
+          "name": "user_customers_user_id_users_id_fk",
+          "tableFrom": "user_customers",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "user_customers_customer_id_customers_id_fk": {
+          "name": "user_customers_customer_id_customers_id_fk",
+          "tableFrom": "user_customers",
+          "tableTo": "customers",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
+    "public.credit_note_status": {
+      "name": "credit_note_status",
+      "schema": "public",
+      "values": [
+        "Draft",
+        "Issued",
+        "Applied",
+        "Voided"
+      ]
+    },
+    "public.customer_status": {
+      "name": "customer_status",
+      "schema": "public",
+      "values": [
+        "Active",
+        "Inactive",
+        "Suspended"
+      ]
+    },
+    "public.discount_duration": {
+      "name": "discount_duration",
+      "schema": "public",
+      "values": [
+        "once",
+        "repeating",
+        "forever"
+      ]
+    },
+    "public.discount_type": {
+      "name": "discount_type",
+      "schema": "public",
+      "values": [
+        "percentage",
+        "fixed_amount"
+      ]
+    },
+    "public.gender": {
+      "name": "gender",
+      "schema": "public",
+      "values": [
+        "male",
+        "female",
+        "other"
+      ]
+    },
+    "public.invoice_status": {
+      "name": "invoice_status",
+      "schema": "public",
+      "values": [
+        "Draft",
+        "Sent",
+        "Paid",
+        "Void"
+      ]
+    },
+    "public.leave_request_status": {
+      "name": "leave_request_status",
+      "schema": "public",
+      "values": [
+        "Pending",
+        "Approved",
+        "Rejected"
+      ]
+    },
+    "public.leave_type": {
+      "name": "leave_type",
+      "schema": "public",
+      "values": [
+        "annual",
+        "sick",
+        "maternity",
+        "unpaid"
+      ]
+    },
+    "public.marital_status": {
+      "name": "marital_status",
+      "schema": "public",
+      "values": [
+        "single",
+        "married",
+        "divorced",
+        "widowed"
+      ]
+    },
+    "public.payment_status": {
+      "name": "payment_status",
+      "schema": "public",
+      "values": [
+        "Pending",
+        "Succeeded",
+        "Failed"
+      ]
+    },
+    "public.payroll_status": {
+      "name": "payroll_status",
+      "schema": "public",
+      "values": [
+        "Draft",
+        "Approved",
+        "Paid",
+        "Cancelled"
+      ]
+    },
+    "public.performance_rating": {
+      "name": "performance_rating",
+      "schema": "public",
+      "values": [
+        "Excellent",
+        "Good",
+        "Average",
+        "Poor"
+      ]
+    },
+    "public.subscription_status": {
+      "name": "subscription_status",
+      "schema": "public",
+      "values": [
+        "Active",
+        "Inactive",
+        "Cancelled"
+      ]
+    },
+    "public.ticket_priority": {
+      "name": "ticket_priority",
+      "schema": "public",
+      "values": [
+        "Low",
+        "Medium",
+        "High",
+        "Urgent"
+      ]
+    },
+    "public.ticket_status": {
+      "name": "ticket_status",
+      "schema": "public",
+      "values": [
+        "Open",
+        "In Progress",
+        "Resolved",
+        "Closed"
+      ]
+    },
+    "public.transaction_status": {
+      "name": "transaction_status",
+      "schema": "public",
+      "values": [
+        "Pending",
+        "Completed",
+        "Failed",
+        "Refunded"
+      ]
+    },
     "public.equipment_status": {
       "name": "equipment_status",
       "schema": "public",

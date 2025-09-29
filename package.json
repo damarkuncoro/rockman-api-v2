@@ -28,7 +28,7 @@
     "drizzle-zod": "^0.8.3",
     "http-status-codes": "^2.3.0",
     "nanoid": "^5.1.6",
-    "next": "15.5.4",
+    "next": "^15.5.4",
     "pg": "^8.16.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@faker-js/faker": "^10.0.0",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^20",
     "@types/pg": "^8.15.5",
