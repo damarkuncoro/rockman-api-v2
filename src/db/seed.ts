@@ -1,7 +1,7 @@
-import { seedUsers } from './seed/users';
+import { seedAll } from './seed/index';
 
 async function main() {
-  await seedUsers();
+  await seedAll();
 }
 
 main().catch((e) => {

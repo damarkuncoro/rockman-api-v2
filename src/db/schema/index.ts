@@ -21,6 +21,7 @@ export * from "./user_devices"; // Depends on users
 export * from "./user_products"; // Depends on users, products
 export * from "./user_memberships"; // Depends on users, memberships
 export * from "./user_identities"; // Depends on users
+export * from "./user_settings"; // Depends on users
 export * from "./customer_equipment"; // Depends on users, network_equipment
 export * from "./loyalty_points"; // Depends on users
 export * from "./tickets"; // Depends on users
