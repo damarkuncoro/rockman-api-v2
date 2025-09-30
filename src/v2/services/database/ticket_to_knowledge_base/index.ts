@@ -1,1 +1,1 @@
-export * from "./ticket_to_knowledge_base.service";
+export * from './ticket_to_knowledge_base.service';

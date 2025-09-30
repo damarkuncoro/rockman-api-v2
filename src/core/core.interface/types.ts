@@ -14,6 +14,13 @@ export type TFindResponse<T> = {
   total: number;
   totalPage: number;
 };
+import { PgTable } from "drizzle-orm/pg-core";
+
+export type TBaseTable = PgTable & {
+  id: {
+    dataType: 'number';
+  }
+}
 export type AppRouteHandlerFn<TParams = unknown> = (
   req: Request,
   ctx: { params: TParams },

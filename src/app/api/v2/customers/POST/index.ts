@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { customerService } from "@/v2/services/database/customers";
+import { customersService } from "@/v2/services/database/customers";
 import { StatusCodes } from "http-status-codes";
 import { z, ZodError } from "zod";
 import { customerApiSchema } from "@/db/schema/customers/validations";
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         : undefined,
     };
 
-    const newCustomer = await customerService.POST.Create(newCustomerData);
+    const newCustomer = await customersService.POST.Create(newCustomerData);
 
     return NextResponse.json(
       {

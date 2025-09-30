@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { customerService } from "@/v2/services/database/customers";
+import { customersService } from "@/v2/services/database/customers";
 import { StatusCodes } from "http-status-codes";
 
 export async function GET() {
   try {
-    const customers = await customerService.GET.All();
+    const customers = await customersService.GET.All();
 
     return NextResponse.json({
       message: "Successfully retrieved customers",
-      data: customers,
+      customers,
     });
   } catch (error) {
     console.error("Failed to retrieve customers:", error);

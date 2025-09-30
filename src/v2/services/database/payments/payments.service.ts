@@ -1,12 +1,5 @@
-import { Service } from "@/core/core.service";
-import { IService } from "@/core/core.interface";
-import { payments } from "@/db/schema/billing/payments";
-import { PaymentRepository } from "@/v2/repositories/database/payments";
+import { Service } from '@/core/core.service';
+import { PaymentRepository } from '@/v2/repositories/database/payments';
+import { payments } from '@/db/schema';
 
-class PaymentService extends Service<typeof payments> {
-  constructor() {
-    super(new PaymentRepository());
-  }
-}
-
-export const paymentService: IService<typeof payments> = new PaymentService();
+export const paymentsService = new Service(PaymentRepository, payments, { enableLogging: true })

@@ -1,12 +1,13 @@
 import { InferSelectModel, InferInsertModel } from "drizzle-orm"
 import { PgTable } from "drizzle-orm/pg-core"
+import { IRepository, TFindPayload } from "./core.interface"
 
 export class Service<TTable extends PgTable> {
-  protected repository: any
+  protected repository: IRepository<TTable>
   protected config: { enableLogging: boolean; enableValidation: boolean; enableCaching: boolean }
 
   constructor(
-    repository: any,
+    repository: new (table: TTable) => IRepository<TTable>,
     table: TTable,
     config: Partial<{ enableLogging: boolean; enableValidation: boolean; enableCaching: boolean }> = {}
   ) {
@@ -19,11 +20,11 @@ export class Service<TTable extends PgTable> {
     }
   }
 
-  private log(...args: any[]) {
+  private log(...args: unknown[]) {
     if (this.config.enableLogging) console.log(...args)
   }
 
-  async find(payload: any) {
+  async find(payload: TFindPayload) {
     return this.repository.find(payload)
   }
 
@@ -80,6 +81,7 @@ export class Service<TTable extends PgTable> {
       return results.filter(Boolean).length
     }
   }
+
 QUERY = {
   Paginate: async (options: {
     page?: number
@@ -121,14 +123,12 @@ QUERY = {
   }
 }
 
-
-
-  UTILS = {
+UTILS = {
     ValidateData: async (data: Partial<InferInsertModel<TTable>>) => !!data && Object.keys(data).length > 0,
     SanitizeData: async (data: Partial<InferInsertModel<TTable>>) => {
       const sanitized = { ...data }
       Object.keys(sanitized).forEach(k => {
-        if (typeof (sanitized as any)[k] === 'string') (sanitized as any)[k] = (sanitized as any)[k].trim()
+        if (typeof (sanitized as { [key: string]: unknown })[k] === 'string') (sanitized as { [key: string]: unknown })[k] = ((sanitized as { [key: string]: unknown })[k] as string).trim()
       })
       return sanitized
     },

@@ -1,12 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { changeHistory } from "@/db/schema/change_history/table";
-import { changeHistoryRepository } from "@/v2/repositories/database/change_history";
+import { Service } from '@/core/core.service';
+import { ChangeHistoryRepository } from '@/v2/repositories/database/change_history';
+import { changeHistory } from '@/db/schema';
 
-class ChangeHistoryService extends Service<typeof changeHistory> {
-  constructor() {
-    super(changeHistoryRepository);
-  }
-}
-
-export const changeHistoryService: IService<typeof changeHistory> = new ChangeHistoryService();
+export const changeHistoryService = new Service(ChangeHistoryRepository, changeHistory, { enableLogging: true })

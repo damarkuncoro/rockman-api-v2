@@ -1,24 +1,17 @@
-import { NextResponse } from "next/server";
-import { productsService } from "@/v2/services/database/products";
-import { StatusCodes } from "http-status-codes";
+import { NextResponse } from 'next/server';
+import { StatusCodes } from 'http-status-codes';
+
+import { productsService } from '@/v2/services/database/products';
 
 export async function GET() {
+  
   try {
     const products = await productsService.GET.All();
-
-    return NextResponse.json({
-      message: "Successfully retrieved products",
-      data: products,
-    });
-  } catch (error) {
-    console.error("Failed to retrieve products:", error);
+    return NextResponse.json({ message: 'Products fetched successfully', products });
+  } catch {
     return NextResponse.json(
-      {
-        message: "Failed to retrieve products",
-      },
-      {
-        status: StatusCodes.INTERNAL_SERVER_ERROR,
-      }
+      { message: 'Internal Server Error' },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR },
     );
   }
 }

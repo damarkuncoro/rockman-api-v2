@@ -1,1 +1,1 @@
-export * from "./ticket_replies.service";
+export * from './ticket_replies.service';

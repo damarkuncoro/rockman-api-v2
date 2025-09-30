@@ -1,12 +1,5 @@
-import { Service } from "@/core/core.service";
-import { IService } from "@/core/core.interface";
-import { accessLogs } from "@/db/schema/access_logs/table";
-import { accessLogsRepository } from "@/v2/repositories/database/access_logs/";
+import { Service } from '@/core/core.service';
+import { AccessLogsRepository } from '@/v2/repositories/database/access_logs';
+import { accessLogs } from '@/db/schema';
 
-class AccessLogsService extends Service<typeof accessLogs> {
-  constructor() {
-    super(accessLogsRepository);
-  }
-}
-
-export const accessLogsService: IService<typeof accessLogs> = new AccessLogsService();
+export const accessLogsService = new Service(AccessLogsRepository, accessLogs, { enableLogging: true })

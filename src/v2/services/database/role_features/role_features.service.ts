@@ -1,12 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { roleFeatures } from "@/db/schema/role_features/table";
-import { roleFeaturesRepository } from "@/v2/repositories/database/role_features";
+import { Service } from '@/core/core.service';
+import { RoleFeaturesRepository } from '@/v2/repositories/database/role_features';
+import { roleFeatures } from '@/db/schema';
 
-class RoleFeaturesService extends Service<typeof roleFeatures> {
-  constructor() {
-    super(roleFeaturesRepository);
-  }
-}
-
-export const roleFeaturesService: IService<typeof roleFeatures> = new RoleFeaturesService();
+export const roleFeaturesService = new Service(RoleFeaturesRepository, roleFeatures, { enableLogging: true })

@@ -1,1 +1,1 @@
-export * from "./payment_methods.service";
+export * from './payment_methods.service';

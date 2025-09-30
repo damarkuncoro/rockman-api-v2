@@ -1,1 +1,1 @@
-export * from "./outages.service";
+export * from './outages.service';

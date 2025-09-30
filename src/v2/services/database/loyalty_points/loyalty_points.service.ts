@@ -1,12 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { loyaltyPoints } from "@/db/schema/loyalty_points/table";
-import { loyaltyPointsRepository } from "@/v2/repositories/database/loyalty_points";
+import { Service } from '@/core/core.service';
+import { LoyaltyPointsRepository } from '@/v2/repositories/database/loyalty_points';
+import { loyaltyPoints } from '@/db/schema';
 
-class LoyaltyPointsService extends Service<typeof loyaltyPoints> {
-  constructor() {
-    super(loyaltyPointsRepository);
-  }
-}
-
-export const loyaltyPointsService: IService<typeof loyaltyPoints> = new LoyaltyPointsService();
+export const loyaltyPointsService = new Service(LoyaltyPointsRepository, loyaltyPoints, { enableLogging: true })

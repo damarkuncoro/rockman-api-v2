@@ -1,1 +1,1 @@
-export * from "./access_logs.service";
+export * from './access_logs.service';

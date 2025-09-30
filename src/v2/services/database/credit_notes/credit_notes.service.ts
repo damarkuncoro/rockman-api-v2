@@ -1,13 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { creditNotes } from "@/db/schema/billing/credit_notes";
-import { CreditNoteRepository } from "@/v2/repositories/database/credit_notes";
+import { Service } from '@/core/core.service';
+import { CreditNoteRepository } from '@/v2/repositories/database/credit_notes';
+import { creditNotes } from '@/db/schema';
 
-class CreditNoteService extends Service<typeof creditNotes> {
-  constructor() {
-    super(new CreditNoteRepository());
-  }
-}
-
-export const creditNoteService: IService<typeof creditNotes> =
-  new CreditNoteService();
+export const creditNotesService = new Service(CreditNoteRepository, creditNotes, { enableLogging: true })

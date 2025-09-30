@@ -1,12 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { customerEquipment } from "@/db/schema/customer_equipment/table";
-import { customerEquipmentRepository } from "@/v2/repositories/database/customer_equipment";
+import { Service } from '@/core/core.service';
+import { CustomerEquipmentRepository } from '@/v2/repositories/database/customer_equipment';
+import { customerEquipment } from '@/db/schema';
 
-class CustomerEquipmentService extends Service<typeof customerEquipment> {
-  constructor() {
-    super(customerEquipmentRepository);
-  }
-}
-
-export const customerEquipmentService: IService<typeof customerEquipment> = new CustomerEquipmentService();
+export const customerEquipmentService = new Service(CustomerEquipmentRepository, customerEquipment, { enableLogging: true })

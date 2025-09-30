@@ -1,12 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { policies } from "@/db/schema/policies/table";
-import { policiesRepository } from "@/v2/repositories/database/policies";
+import { Service } from '@/core/core.service';
+import { PoliciesRepository } from '@/v2/repositories/database/policies';
+import { policies } from '@/db/schema';
 
-class PoliciesService extends Service<typeof policies> {
-  constructor() {
-    super(policiesRepository);
-  }
-}
-
-export const policiesService: IService<typeof policies> = new PoliciesService();
+export const policiesService = new Service(PoliciesRepository, policies, { enableLogging: true })

@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const users = await usersService.GET.All();
     return NextResponse.json({ message: 'Users fetched successfully', users });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: 'Internal Server Error' },
       { status: StatusCodes.INTERNAL_SERVER_ERROR },

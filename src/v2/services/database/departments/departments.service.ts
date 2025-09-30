@@ -1,12 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { departments } from "@/db/schema/departments/table";
-import { departmentsRepository } from "@/v2/repositories/database/departments";
+import { Service } from '@/core/core.service';
+import { DepartmentsRepository } from '@/v2/repositories/database/departments';
+import { departments } from '@/db/schema';
 
-class DepartmentsService extends Service<typeof departments> {
-  constructor() {
-    super(departmentsRepository);
-  }
-}
-
-export const departmentsService: IService<typeof departments> = new DepartmentsService();
+export const departmentsService = new Service(DepartmentsRepository, departments, { enableLogging: true })

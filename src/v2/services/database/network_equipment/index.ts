@@ -1,1 +1,1 @@
-export * from "./network_equipment.service";
+export * from './network_equipment.service';

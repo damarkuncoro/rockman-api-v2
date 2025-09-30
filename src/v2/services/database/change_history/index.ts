@@ -1,1 +1,1 @@
-export * from "./change_history.service";
+export * from './change_history.service';

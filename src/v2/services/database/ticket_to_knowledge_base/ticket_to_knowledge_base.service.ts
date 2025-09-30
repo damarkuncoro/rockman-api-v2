@@ -1,12 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { ticketToKnowledgeBase } from "@/db/schema/ticket_to_knowledge_base/table";
-import { ticketToKnowledgeBaseRepository } from "@/v2/repositories/database/ticket_to_knowledge_base";
+import { Service } from '@/core/core.service';
+import { TicketToKnowledgeBaseRepository } from '@/v2/repositories/database/ticket_to_knowledge_base';
+import { ticketToKnowledgeBase } from '@/db/schema';
 
-class TicketToKnowledgeBaseService extends Service<typeof ticketToKnowledgeBase> {
-  constructor() {
-    super(ticketToKnowledgeBaseRepository);
-  }
-}
-
-export const ticketToKnowledgeBaseService: IService<typeof ticketToKnowledgeBase> = new TicketToKnowledgeBaseService();
+export const ticketToKnowledgeBaseService = new Service(TicketToKnowledgeBaseRepository, ticketToKnowledgeBase, { enableLogging: true })

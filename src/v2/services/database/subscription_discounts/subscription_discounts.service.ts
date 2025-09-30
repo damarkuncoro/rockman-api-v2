@@ -1,14 +1,5 @@
-import { Service } from "@/core/core.service";
-import { IService } from "@/core/core.interface";
-import { subscriptionDiscounts } from "@/db/schema/billing/subscription_discounts";
-import { SubscriptionDiscountRepository } from "@/v2/repositories/database/subscription_discounts";
+import { Service } from '@/core/core.service';
+import { SubscriptionDiscountRepository } from '@/v2/repositories/database/subscription_discounts';
+import { subscriptionDiscounts } from '@/db/schema';
 
-class SubscriptionDiscountService extends Service<typeof subscriptionDiscounts> {
-  constructor() {
-    super(new SubscriptionDiscountRepository());
-  }
-}
-
-export const subscriptionDiscountService: IService<
-  typeof subscriptionDiscounts
-> = new SubscriptionDiscountService();
+export const subscriptionDiscountsService = new Service(SubscriptionDiscountRepository, subscriptionDiscounts, { enableLogging: true })

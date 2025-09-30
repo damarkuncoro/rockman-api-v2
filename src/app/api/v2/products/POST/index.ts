@@ -1,55 +1,27 @@
-import { NextResponse } from "next/server";
-import { productsService } from "@/v2/services/database/products";
-import { StatusCodes } from "http-status-codes";
-import { z, ZodError } from "zod";
-import { productApiSchema } from "@/db/schema/products/validations";
+import { StatusCodes } from 'http-status-codes';
+import { NextRequest, NextResponse } from 'next/server';
+import { productsService } from '@/v2/services/database/products';
 
-type TProductApi = z.infer<typeof productApiSchema>;
+import { z } from 'zod';
 
-export async function POST(request: Request) {
-  try {
-    const body = (await request.json()) as TProductApi;
+const schema = z.object({
+  name: z.string().max(100),
+  description: z.string().optional(),
+  price: z.string(),
+});
 
-    const validatedData = productApiSchema.parse(body);
+export async function POST(request: NextRequest) {
+  const body = await request.json();
 
-    const newProductData = {
-      ...validatedData,
-      price: String(validatedData.price),
-    };
+  const parsed = schema.safeParse(body);
 
-    const newProduct = await productsService.POST.Create(newProductData);
-
-    return NextResponse.json(
-      {
-        message: "Successfully created product",
-        data: newProduct,
-      },
-      {
-        status: StatusCodes.CREATED,
-      }
-    );
-  } catch (error) {
-    console.error("Failed to create product:", error);
-
-    if (error instanceof ZodError) {
-      return NextResponse.json(
-        {
-          message: "Validation failed",
-          errors: error.issues,
-        },
-        {
-          status: StatusCodes.BAD_REQUEST,
-        }
-      );
-    }
-
-    return NextResponse.json(
-      {
-        message: "Failed to create product",
-      },
-      {
-        status: StatusCodes.INTERNAL_SERVER_ERROR,
-      }
-    );
+  if (!parsed.success) {
+    return NextResponse.json(parsed.error, {
+      status: StatusCodes.BAD_REQUEST,
+    });
   }
+
+  const product = await productsService.POST.Create(parsed.data);
+
+  return NextResponse.json(product, { status: StatusCodes.CREATED });
 }

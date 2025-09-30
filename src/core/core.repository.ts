@@ -15,6 +15,7 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
     payload: TFindPayload,
   ): Promise<TFindResponse<InferSelectModel<TTable>>> {
     const { page, pageSize } = payload;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data = await db.select().from(this.table as any);
     const total = data.length;
     const totalPage = Math.ceil(total / pageSize);
@@ -30,12 +31,14 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
   SELECT = {
 
     All: async (): Promise<InferSelectModel<TTable>[]> => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await db.select().from(this.table as any)
       return result as InferSelectModel<TTable>[]
     },
 
     ById: async (id: number | string): Promise<InferSelectModel<TTable> | null> => {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rows = await db.select().from(this.table as any).where(eq((this.table as any).id, id))
         return rows.length > 0 ? (rows[0] as InferSelectModel<TTable>) : null
       } catch (error: unknown) {
@@ -54,6 +57,7 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
   INSERT = {
     One: async (values: InferInsertModel<TTable>): Promise<InferSelectModel<TTable>> => {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rows = await db.insert(this.table as any).values(values).returning() as any[]
 
         if (!rows || rows.length === 0) {
@@ -70,6 +74,7 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
 
   UPDATE = {
     One: async (id: number | string, values: Partial<InferInsertModel<TTable>>): Promise<InferSelectModel<TTable> | null> => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const rows = await db.update(this.table as any).set(values).where(eq((this.table as any).id, id)).returning() as any[]
       return rows.length > 0 ? rows[0] as InferSelectModel<TTable> : null
     }
@@ -80,6 +85,7 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
     
     One: async (id: number | string): Promise<boolean> => {
   
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await db.delete(this.table as any).where(eq((this.table as any).id, id)).returning() as any[]
       return result.length > 0
     }

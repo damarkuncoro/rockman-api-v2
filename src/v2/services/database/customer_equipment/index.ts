@@ -1,1 +1,1 @@
-export * from "./customer_equipment.service";
+export * from './customer_equipment.service';

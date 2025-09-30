@@ -1,12 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { features } from "@/db/schema/features/table";
-import { featuresRepository } from "@/v2/repositories/database/features";
+import { Service } from '@/core/core.service';
+import { FeaturesRepository } from '@/v2/repositories/database/features';
+import { features } from '@/db/schema';
 
-class FeaturesService extends Service<typeof features> {
-  constructor() {
-    super(featuresRepository);
-  }
-}
-
-export const featuresService: IService<typeof features> = new FeaturesService();
+export const featuresService = new Service(FeaturesRepository, features, { enableLogging: true })

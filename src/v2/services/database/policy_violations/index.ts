@@ -1,1 +1,1 @@
-export * from "./policy_violations.service";
+export * from './policy_violations.service';

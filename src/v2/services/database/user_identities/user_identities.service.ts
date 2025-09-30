@@ -1,12 +1,5 @@
-import { IService } from "@/core/core.interface";
-import { Service } from "@/core/core.service";
-import { userIdentities } from "@/db/schema/user_identities/table";
-import { userIdentitiesRepository } from "@/v2/repositories/database/user_identities";
+import { Service } from '@/core/core.service';
+import { UserIdentitiesRepository } from '@/v2/repositories/database/user_identities';
+import { userIdentities } from '@/db/schema';
 
-class UserIdentitiesService extends Service<typeof userIdentities> {
-  constructor() {
-    super(userIdentitiesRepository);
-  }
-}
-
-export const userIdentitiesService: IService<typeof userIdentities> = new UserIdentitiesService();
+export const userIdentitiesService = new Service(UserIdentitiesRepository, userIdentities, { enableLogging: true })
