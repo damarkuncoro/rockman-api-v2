@@ -16,23 +16,23 @@ export async function DELETE(
   }
 
   try {
-    const success = await outagesService.DELETE.Remove(id);
+    const deleted = await outagesService.DELETE.Remove(id);
 
-    if (!success) {
+    if (!deleted) {
       return NextResponse.json(
-        { message: 'Outage not found or could not be deleted' },
+        { message: 'Gangguan tidak ditemukan' },
         { status: StatusCodes.NOT_FOUND }
       );
     }
 
     return NextResponse.json(
-      { message: 'Outage deleted successfully' },
+      { message: 'Gangguan berhasil dihapus' },
       { status: StatusCodes.OK }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      { message: 'Terjadi kesalahan saat menghapus gangguan' },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR }
     );
   }
 }

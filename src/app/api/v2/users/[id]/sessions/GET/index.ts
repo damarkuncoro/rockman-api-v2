@@ -32,7 +32,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(userSessions, { status: StatusCodes.OK });
+    return NextResponse.json({ data: userSessions }, { status: StatusCodes.OK });
   } catch (error) {
     console.error('Error saat mengambil sesi pengguna:', error);
     return NextResponse.json(

@@ -30,16 +30,16 @@ export async function PUT(request: NextRequest) {
 
     if (!outage) {
       return NextResponse.json(
-        { message: 'Outage not found' },
+        { message: 'Gangguan tidak ditemukan' },
         { status: StatusCodes.NOT_FOUND }
       );
     }
 
     return NextResponse.json(outage, { status: StatusCodes.OK });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR },
+      { message: 'Terjadi kesalahan saat memperbarui gangguan' },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR }
     );
   }
 }

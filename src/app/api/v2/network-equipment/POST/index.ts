@@ -2,8 +2,6 @@ import { StatusCodes } from 'http-status-codes';
 import { NextRequest, NextResponse } from 'next/server';
 import { networkEquipmentService } from '@/v2/services/database/network_equipment';
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
-import { networkEquipment } from '@/db/schema';
 
 /**
  * Schema validasi untuk pembuatan network equipment baru

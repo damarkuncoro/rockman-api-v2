@@ -1,8 +1,10 @@
-import { Repository } from "../../../../core/core.repository";
-import { departments } from "../../../../db/schema/departments/table";
+import { Repository } from "@/core/core.repository";
+import { departments } from "@/db/schema/departments";
 
 export class DepartmentsRepository extends Repository<typeof departments> {
   constructor() {
     super(departments);
   }
 }
+
+

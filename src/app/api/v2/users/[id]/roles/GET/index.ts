@@ -32,7 +32,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(userRoles, { status: StatusCodes.OK });
+    return NextResponse.json({ data: userRoles }, { status: StatusCodes.OK });
   } catch (error) {
     console.error('Error saat mengambil peran pengguna:', error);
     return NextResponse.json(

@@ -44,6 +44,12 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
       } catch (error: unknown) {
         const dbError = error as { code?: string; message?: string }
 
+        // Jika error terkait UUID yang tidak valid
+        if (dbError.code === '22P02' || dbError.message?.includes('invalid input syntax for type uuid')) {
+          console.error(`Invalid UUID format: ${id}`)
+          return null
+        }
+        
         if (dbError.code === '22003') {
           throw new Error(`ID value ${id} is out of range for PostgreSQL integer type`)
         }
