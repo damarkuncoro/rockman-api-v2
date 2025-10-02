@@ -10,6 +10,8 @@ export interface IService<TTable extends PgTable> {
   GET: {
     All: () => Promise<Array<TTable['$inferSelect']>>;
     ById: (id: number | string) => Promise<TTable['$inferSelect'] | null>;
+    ByUserId: (userId: number | string) => Promise<Array<TTable['$inferSelect']>>;
+    Count: (filter?: Partial<TTable['$inferSelect']>) => Promise<number>;
   };
   POST: {
     Create: <T extends TTable['$inferInsert']>(

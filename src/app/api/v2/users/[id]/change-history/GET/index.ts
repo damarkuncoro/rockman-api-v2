@@ -12,10 +12,11 @@ import { changeHistoryService } from '@/v2/services/database/change_history';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = params.id;
+    const resolvedParams = await params;
+    const userId = resolvedParams.id;
 
     // Validasi ID pengguna
     if (!userId) {

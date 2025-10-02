@@ -1,17 +1,4 @@
-import { NextResponse } from 'next/server';
-import { StatusCodes } from 'http-status-codes';
-
+import { API } from '@/v2/utils/api-handler';
 import { paymentsService } from '@/v2/services/database/payments';
 
-export async function GET() {
-  
-  try {
-    const payments = await paymentsService.GET.All();
-    return NextResponse.json({ message: 'Payments fetched successfully', payments });
-  } catch {
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR },
-    );
-  }
-}
+export const GET = API.GET.All(paymentsService.GET.All, 'Payments');

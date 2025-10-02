@@ -56,7 +56,35 @@ export class Repository<TTable extends PgTable> implements IRepository<TTable> {
         const errorMessage = dbError.message || 'Unknown database error'
         throw new Error(`Failed query: ${errorMessage}`)
       }
-    }
+    },
+
+    ByUserId: async (userId: number | string): Promise<InferSelectModel<TTable>[]> => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = await db.select().from(this.table as any).where(eq((this.table as any).userId, userId))
+      return result as InferSelectModel<TTable>[]
+    },
+
+    Count: async (filter?: Partial<InferSelectModel<TTable>>): Promise<number> => {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const result = await db.select().from(this.table as any);
+        
+        // Jika filter disediakan, filter hasil secara manual
+        if (filter) {
+          const filteredResult = result.filter(row => {
+            return Object.entries(filter).every(([key, value]) => {
+              return value === undefined || row[key] === value;
+            });
+          });
+          return filteredResult.length;
+        }
+        
+        return result.length;
+      } catch (error) {
+        console.error('COUNT error:', error);
+        throw error;
+      }
+    },
   }
 
 

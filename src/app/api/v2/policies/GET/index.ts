@@ -1,17 +1,6 @@
-import { NextResponse } from 'next/server';
-import { StatusCodes } from 'http-status-codes';
-
+import { API } from '@/v2/utils/api-handler';
 import { policiesService } from '@/v2/services/database/policies';
 
-export async function GET() {
-  
-  try {
-    const policies = await policiesService.GET.All();
-    return NextResponse.json({ message: 'Policies fetched successfully', policies });
-  } catch {
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR },
-    );
-  }
-}
+export const GET = API.GET.All(policiesService.GET.All, 'Policies');
+
+

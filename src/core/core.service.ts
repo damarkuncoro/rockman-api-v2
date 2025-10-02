@@ -48,9 +48,13 @@ export class Service<TTable extends PgTable> {
       this.log('GET.ById called', id)
       return this.repository.SELECT.ById(id)
     },
+    ByUserId: async (userId: number | string): Promise<InferSelectModel<TTable>[]> => {
+      this.log('GET.ByUserId called', userId)
+      return this.repository.SELECT.ByUserId(userId)
+    },
     Count: async (filter?: Partial<InferSelectModel<TTable>>): Promise<number> => {
       this.log('GET.Count called', filter)
-      return this.repository.SELECT.All().then(data => data.length)
+      return this.repository.SELECT.Count(filter)
     }
   }
 

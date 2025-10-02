@@ -1,49 +1,47 @@
-/**
- * Modul Autentikasi untuk Rockman API v2
- * 
- * Modul ini menyediakan fungsi-fungsi untuk autentikasi dan otorisasi
- * pada endpoint API Rockman v2.
- */
-
 import { NextRequest, NextResponse } from "next/server";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-/**
- * Fungsi autentikasi untuk endpoint API
- * 
- * @param req - NextRequest object
- * @returns Promise<boolean> - true jika autentikasi berhasil, false jika gagal
- */
-export async function authenticate(req: NextRequest): Promise<boolean> {
-  // TODO: Implementasi autentikasi yang sebenarnya
-  // Untuk sementara, semua request dianggap terautentikasi
-  return true;
+const SECRET_KEY = process.env.JWT_SECRET || "secret123";
+
+export async function authenticate(req: NextRequest): Promise<JwtPayload | null> {
+  try {
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader?.startsWith("Bearer ")) return null;
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
+
+    return decoded;
+  } catch {
+    return null;
+  }
 }
+
+// Tipe khusus untuk context API
+export interface ApiContext<TParams extends Record<string, string> = Record<string, string>> {
+  params: TParams;
+}
+
+// Tipe handler API (harus return NextResponse)
+export type ApiHandler<TParams extends Record<string, string> = Record<string, string>> = (
+  req: NextRequest,
+  context: ApiContext<TParams>
+) => Promise<NextResponse>;
 
 /**
  * Middleware autentikasi untuk endpoint API
- * 
- * @param handler - Handler function untuk endpoint API
- * @returns Handler function yang dibungkus dengan autentikasi
  */
 export const auth = {
-  /**
-   * Memastikan request terautentikasi sebelum diproses
-   * 
-   * @param handler - Handler function untuk endpoint API
-   * @returns Handler function yang dibungkus dengan autentikasi
-   */
-  required: (handler: Function) => {
-    return async (req: NextRequest, params: any) => {
-      const isAuthenticated = await authenticate(req);
-      
-      if (!isAuthenticated) {
-        return NextResponse.json(
-          { error: "Unauthorized" },
-          { status: 401 }
-        );
+  required:
+    <TParams extends Record<string, string>>(handler: ApiHandler<TParams>): ApiHandler<TParams> =>
+    async (req: NextRequest, context: ApiContext<TParams>) => {
+      const user = await authenticate(req);
+
+      if (!user) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }
-      
-      return handler(req, params);
-    };
-  }
+
+      // lanjut ke handler
+      return handler(req, context);
+    },
 };

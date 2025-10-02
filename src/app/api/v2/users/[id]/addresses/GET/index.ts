@@ -1,7 +1,7 @@
 /**
- * GET handler untuk /api/v2/users/[id]/tickets
+ * GET handler untuk /api/v2/users/[id]/addresses
  * 
- * Endpoint untuk mendapatkan daftar tickets berdasarkan user ID
+ * Endpoint untuk mendapatkan daftar addresses berdasarkan user ID
  */
 
 import { NextRequest, NextResponse } from 'next/server';

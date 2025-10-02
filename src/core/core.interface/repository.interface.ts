@@ -6,6 +6,8 @@ export interface IRepository<TTable extends PgTable> {
   SELECT: {
     All: () => Promise<Array<TTable['$inferSelect']>>;
     ById: (id: number | string) => Promise<TTable['$inferSelect'] | null>;
+    ByUserId: (userId: number | string) => Promise<Array<TTable['$inferSelect']>>;
+    Count: (filter?: Partial<TTable['$inferSelect']>) => Promise<number>;
   };
   INSERT: {
     One: (data: TTable['$inferInsert']) => Promise<TTable['$inferSelect']>;

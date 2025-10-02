@@ -1,19 +1,5 @@
-import { StatusCodes } from 'http-status-codes';
-import { NextResponse } from 'next/server';
+import { API } from '@/v2/utils/api-handler';
 import { userProductsService } from '@/v2/services/database/user_products';
 
-/**
- * Handler untuk mendapatkan semua data user-products
- * @returns Response dengan data user-products atau pesan error
- */
-export async function GET() {
-  try {
-    const userProducts = await userProductsService.GET.All();
-    return NextResponse.json(userProducts, { status: StatusCodes.OK });
-  } catch {
-    return NextResponse.json(
-      { message: 'Terjadi kesalahan saat mengambil data produk pengguna' },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR }
-    );
-  }
-}
+
+export const GET = API.GET.All(userProductsService.GET.All, 'UserProducts');

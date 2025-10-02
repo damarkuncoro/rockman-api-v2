@@ -1,20 +1,4 @@
-import { StatusCodes } from 'http-status-codes';
-import { NextRequest, NextResponse } from 'next/server';
 import { customerEquipmentService } from '@/v2/services/database/customer_equipment';
+import { API } from '@/v2/utils/api-handler';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const resolvedParams = await params
-
-  const customerEquipment = await customerEquipmentService.GET.ById(resolvedParams.id);
-  if (!customerEquipment) {
-    return NextResponse.json(
-      { message: 'Customer Equipment not found' },
-      { status: StatusCodes.NOT_FOUND }
-    );
-  }
-
-  return NextResponse.json(customerEquipment, { status: StatusCodes.OK });
-}
+export const GET = API.GET.ById(customerEquipmentService.GET.ById, "Customer Equipment");

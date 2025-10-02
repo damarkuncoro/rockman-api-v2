@@ -1,17 +1,4 @@
-import { NextResponse } from 'next/server';
-import { StatusCodes } from 'http-status-codes';
-
+import { API } from '@/v2/utils/api-handler';
 import { invoicesService } from '@/v2/services/database/invoices';
 
-export async function GET() {
-  
-  try {
-    const invoices = await invoicesService.GET.All();
-    return NextResponse.json({ message: 'Invoices fetched successfully', invoices });
-  } catch {
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR },
-    );
-  }
-}
+export const GET = API.GET.All(invoicesService.GET.All, 'Invoices');

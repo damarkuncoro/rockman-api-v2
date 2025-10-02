@@ -1,20 +1,4 @@
-import { StatusCodes } from 'http-status-codes';
-import { NextRequest, NextResponse } from 'next/server';
+import { API } from '@/v2/utils/api-handler';
 import { featureCategoriesService } from '@/v2/services/database/feature_categories';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const resolvedParams = await params
-
-  const featureCategory = await featureCategoriesService.GET.ById(resolvedParams.id);
-  if (!featureCategory) {
-    return NextResponse.json(
-      { message: 'Feature Category not found' },
-      { status: StatusCodes.NOT_FOUND }
-    );
-  }
-
-  return NextResponse.json(featureCategory, { status: StatusCodes.OK });
-}
+export const GET = API.GET.ById(featureCategoriesService.GET.ById, "FeatureCategory");
